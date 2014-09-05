@@ -20,27 +20,6 @@
 /* mqTranslate Utilitys */
 
 function qtrans_parseURL($url) {
-	$result = parse_url($url);
-	if ($result === false)
-		return __legacy_qtrans_ParseURL($url);
-	
-	$result = $result + array(
-			'scheme' => '',
-			'host' => '',
-			'user' => '',
-			'pass' => '',
-			'path' => '',
-			'query' => '',
-			'fragment' => ''
-	);
-	
-	if (isset($result['port']))
-		$result['host'] .= ':'. $result['port'];
-	
-	return $result;
-}
-
-function __legacy_qtrans_ParseURL($url) {
 	$r  = '!(?:(\w+)://)?(?:(\w+)\:(\w+)@)?([^/:]+)?';
 	$r .= '(?:\:(\d*))?([^#?]+)?(?:\?([^#]+))?(?:#(.+$))?!i';
 	

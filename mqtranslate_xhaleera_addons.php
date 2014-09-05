@@ -315,11 +315,17 @@ function mqtrans_save_team_options() {
 	qtrans_checkSetting('ul_lang_protection', true, QT_BOOLEAN);
 }
 
+function mqtrans_editorExpand() {
+	return false;
+}
+
 if (!defined('WP_ADMIN'))
 {
 	add_filter('home_url', 'mqtrans_filterHomeURL', 10, 4);
 	add_filter('get_post_metadata', 'mqtrans_filterPostMetaData', 10, 4);
 }
+else
+	add_filter('wp_editor_expand', 'mqtrans_editorExpand');
 
 add_action('edit_user_profile', 			'mqtrans_userProfile');
 add_action('show_user_profile',				'mqtrans_userProfile');
