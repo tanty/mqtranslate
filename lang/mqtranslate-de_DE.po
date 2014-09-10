@@ -3,10 +3,8 @@ msgstr ""
 "Project-Id-Version: mqTranslate 2.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-10 16:30+0200\n"
-"PO-Revision-Date: \n"
-"Last-Translator: Qian Qin <mail@qianqin.de>\n"
-"Language-Team: Qian Qin <mail@qianqin.de>\n"
-"Language: \n"
+"PO-Revision-Date: 2014-09-10 16:45+0200\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -29,8 +27,8 @@ msgid ""
 "2-Letter <a href=\"http://www.w3.org/WAI/ER/IG/ert/iso639.htm#2letter\">ISO "
 "Language Code</a> for the Language you want to insert. (Example: en)"
 msgstr ""
-"2-Zeichen <a href=\"http://www.w3.org/WAI/ER/IG/ert/iso639.htm#2letter\">ISO "
-"Sprachcode</a> für die Sprache. (Beispiel: de)"
+"2-stelliger <a href=\"http://www.w3.org/WAI/ER/IG/ert/iso639.htm#2letter"
+"\">ISO Sprachcode</a> für die Sprache. (Beispiel: de)"
 
 #: ../mqtranslate_configuration.php:57
 msgid "Flag"
@@ -143,9 +141,8 @@ msgstr ""
 "href=\"%2$s\" title=\"Dashboard\">hier</a>."
 
 #: ../mqtranslate_configuration.php:220
-#, fuzzy
 msgid "mqTranslate has been reset."
-msgstr "qTranslate wurde in den Ausgangszustand zurückgesetzt."
+msgstr "mqTranslate wurde in den Ausgangszustand zurückgesetzt."
 
 #: ../mqtranslate_configuration.php:244
 msgid "Gettext databases updated."
@@ -220,9 +217,8 @@ msgid "Save Changes &raquo;"
 msgstr "Einstellungen speichern &raquo;"
 
 #: ../mqtranslate_configuration.php:454
-#, fuzzy
 msgid "Language Management (mqTranslate Configuration)"
-msgstr "Sprachverwaltung (qTranslate Einstellungen)"
+msgstr "Sprachverwaltung (mqTranslate-Einstellungen)"
 
 #: ../mqtranslate_configuration.php:455
 #, fuzzy, php-format
@@ -276,23 +272,23 @@ msgstr ""
 "Sprachen anzeigt, in der der Inhalt verfügbar ist."
 
 #: ../mqtranslate_configuration.php:488
-#, fuzzy
 msgid ""
 "This function will not work correctly if you installed mqTranslate on a blog "
 "with existing entries. In this case you will need to take a look at "
 "\"Convert Database\" under \"Advanced Settings\"."
 msgstr ""
-"Diese Funktion wird nicht korrekt funktionieren, wenn qTranslate auf einem "
-"Blog installiert wurde, wo bereits Einträge geschrieben wurden. In diesem "
-"Fall sind weitere Schritte nötig, siehe \"Datenbank konvertieren\" unter "
-"\"Erweiterterte Einstellungen\"."
+"Diese Funktion wird nicht korrekt funktionieren, wenn mqTranslate auf einem "
+"Blog installiert wurde, in dem bereits Einträge geschrieben wurden. In "
+"diesem Fall sind weitere Schritte nötig, siehe \"Datenbank konvertieren\" "
+"unter \"Erweiterterte Einstellungen\"."
 
 #: ../mqtranslate_configuration.php:491
-#, fuzzy
 msgid ""
 "Show displayed language prefix when Content is not available for the "
 "selected language."
-msgstr "Verstecke Inhalt, der nicht für die gewählte Sprache verfügbar ist."
+msgstr ""
+"Angezeigte Sprache vor dem Inhalt einblenden für den die gewählte Sprache "
+"nicht verfügbar ist."
 
 #: ../mqtranslate_configuration.php:496
 msgid "Detect Browser Language"
@@ -300,8 +296,7 @@ msgstr "Browser Spracherkennung"
 
 #: ../mqtranslate_configuration.php:498
 msgid "Detect the language of the browser and redirect accordingly."
-msgstr ""
-"Erkenne die Sprache vom Browser der Besucher und leite entsprechend um."
+msgstr "Erkenne die Sprache des Browsers und leite entsprechend um."
 
 #: ../mqtranslate_configuration.php:501
 msgid ""
@@ -319,7 +314,7 @@ msgstr "Erweiterte Einstellungen"
 #: ../mqtranslate_configuration.php:506 ../mqtranslate_services.php:370
 #: ../mqtranslate_xhaleera_addons.php:279
 msgid "Show / Hide"
-msgstr ""
+msgstr "Anzeigen / Verstecken"
 
 #: ../mqtranslate_configuration.php:509 ../mqtranslate_configuration.php:511
 msgid "URL Modification Mode"
@@ -354,13 +349,12 @@ msgid "Flag Image Path"
 msgstr "Pfad für Flaggenbilder"
 
 #: ../mqtranslate_configuration.php:528
-#, fuzzy
 msgid ""
 "Path to the flag images under wp-content, with trailing slash. (Default: "
 "plugins/mqtranslate/flags/)"
 msgstr ""
 "Pfad für die Flaggenbilder unter wp-content, mit Slash am Ende. (Standard: "
-"plugins/qtranslate/flags/)"
+"plugins/mqtranslate/flags/)"
 
 #: ../mqtranslate_configuration.php:532
 msgid "Ignore Links"
@@ -399,13 +393,12 @@ msgid "Update Gettext databases now."
 msgstr "Aktualisiere jetzt alle Gettext Datenbanken."
 
 #: ../mqtranslate_configuration.php:554
-#, fuzzy
 msgid ""
 "mqTranslate will query the Wordpress Localisation Repository every week and "
 "download the latest Gettext Databases (.mo Files)."
 msgstr ""
-"qTranslate überprüft jede Woche die Wordpress Localisation Repository und "
-"lädt die neusten Gettext Datenbanken (.mo-Dateien) herrunter."
+"mqTranslate überprüft jede Woche das Wordpress-Lokalisierungsverzeichnis und "
+"lädt die neusten Gettext-Datenbanken (.mo-Dateien) herunter."
 
 #: ../mqtranslate_configuration.php:558
 msgid "Date / Time Conversion"
@@ -443,36 +436,32 @@ msgstr ""
 "Je nachdem, welcher Modus ausgewählt ist, sind weitere Einstellungen nötig."
 
 #: ../mqtranslate_configuration.php:568
-#, fuzzy
 msgid "Reset mqTranslate"
-msgstr "qTranslate zurücksetzen"
+msgstr "mqTranslate zurücksetzen"
 
 #: ../mqtranslate_configuration.php:570
-#, fuzzy
 msgid ""
 "Check this box and click Save Changes to reset all mqTranslate settings."
 msgstr ""
-"Aktivere diese Box und klicke auf Einstellungen speichern um alle qTranslate "
-"Einstellungen zurückzusetzen."
+"Aktivere diese Box und klicke auf Einstellungen speichern um alle "
+"mqTranslate-Einstellungen zurückzusetzen."
 
 #: ../mqtranslate_configuration.php:572
-#, fuzzy
 msgid "Yes, I really want to reset mqTranslate."
-msgstr "Ja, ich möchte wirklich qTranslate zurücksetzen."
+msgstr "Ja, ich möchte mqTranslate wirklich zurücksetzen."
 
 #: ../mqtranslate_configuration.php:574
 msgid "Also delete Translations for Categories/Tags/Link Categories."
 msgstr "Lösche außerdem alle Überetzungen für Kategorien/Tags/Link Kategorien."
 
 #: ../mqtranslate_configuration.php:576
-#, fuzzy
 msgid ""
 "If something isn't working correctly, you can always try to reset all "
 "mqTranslate settings. A Reset won't delete any posts but will remove all "
 "settings (including all languages added)."
 msgstr ""
-"Wenn etwas nicht korrekt funktioniert, kann man versuchen qTranslate "
-"zurückzusetzen. Der Vorgang löscht keine Post, wird aber alle Einstellungen "
+"Wenn etwas nicht korrekt funktioniert, kann man versuchen mqTranslate "
+"zurückzusetzen. Der Vorgang löscht keine Posts, wird aber alle Einstellungen "
 "löschen und zurücksetzen (inklusive neu hinzugefügter Sprachen)."
 
 #: ../mqtranslate_configuration.php:580
@@ -489,7 +478,7 @@ msgstr ""
 "\"%s\">hier klicken</a> um alle Posts in den neuen Sprachformat umzuwandeln."
 
 #: ../mqtranslate_configuration.php:583
-#, fuzzy, php-format
+#, php-format
 msgid ""
 "If you have installed mqTranslate for the first time on a Wordpress with "
 "existing posts, you can either go through all your posts manually and save "
@@ -639,11 +628,11 @@ msgstr "Status von allen Aufträgen aktualisiert."
 
 #: ../mqtranslate_services.php:331
 msgid "Please save your post first."
-msgstr ""
+msgstr "Bitte den Beitrag zuerst speichern."
 
 #: ../mqtranslate_services.php:359
 msgid "Post Title"
-msgstr "Titel"
+msgstr "Beitragstitel"
 
 #: ../mqtranslate_services.php:360
 msgid "Service"
@@ -680,13 +669,12 @@ msgid "Enable qTranslate Services"
 msgstr "qTranslate Services aktivieren"
 
 #: ../mqtranslate_services.php:378
-#, fuzzy
 msgid ""
 "With qTranslate Services, you will be able to use professional human "
 "translation services with a few clicks."
 msgstr ""
 "Mit qTranslate Services kann man mit ein paar Mausklicks Inhalte "
-"professionell übersetzen lassen. (Benötigt OpenSSL)"
+"professionell übersetzen lassen."
 
 #: ../mqtranslate_services.php:388
 msgid "Open Orders"
@@ -846,25 +834,23 @@ msgstr "Weiter"
 
 #: ../mqtranslate_services.php:730 ../mqtranslate_services.php:733
 msgid "Confirm Order"
-msgstr ""
+msgstr "Auftrag bestätigen"
 
 #: ../mqtranslate_services.php:732
-#, fuzzy
 msgid "Please confirm your order."
-msgstr "Das System konnte den Auftrag nicht bearbeiten."
+msgstr "Bitte Auftrag bestätigen."
 
 #: ../mqtranslate_services.php:740 ../mqtranslate_services.php:875
 msgid "Request Translation"
 msgstr "Übersetzungsauftrag erteilen"
 
 #: ../mqtranslate_services.php:742
-#, fuzzy
 msgid "Javascript is required for qTranslate Services"
-msgstr "qTranslate Services aktivieren"
+msgstr "JavaScript wird für die qTranslate-Dienste benötigt"
 
 #: ../mqtranslate_services.php:743
 msgid "Please choose a service first"
-msgstr ""
+msgstr "Bitte zuerst einen Dienst auswählen"
 
 #: ../mqtranslate_services.php:752
 msgid ""
@@ -874,9 +860,8 @@ msgstr ""
 "Bitte später erneut probieren."
 
 #: ../mqtranslate_services.php:760
-#, fuzzy
 msgid "Translation Service"
-msgstr "qTranslate Services"
+msgstr "Übersetzungs-Dienst"
 
 #: ../mqtranslate_services.php:776
 #, php-format
@@ -897,7 +882,7 @@ msgstr ""
 
 #: ../mqtranslate_services.php:813
 msgid "Review Article"
-msgstr ""
+msgstr "Artikel überlesen"
 
 #: ../mqtranslate_services.php:819
 msgid ""
@@ -930,7 +915,6 @@ msgid "~ %1$s %2$s"
 msgstr ""
 
 #: ../mqtranslate_services.php:878
-#, fuzzy
 msgid "An error occured!"
 msgstr "Ein Fehler ist aufgetreten %s"
 
@@ -945,9 +929,8 @@ msgstr "Erlaubt es, dem Besucher eine Sprach auszuwählen."
 
 #: ../mqtranslate_widget.inc.php:25
 #: ../mqtranslate_widget_qtranslate-slug.php:25
-#, fuzzy
 msgid "mqTranslate Language Chooser"
-msgstr "qTranslate Sprachenwahl"
+msgstr "mqTranslate-Sprachenwahl"
 
 #: ../mqtranslate_widget.inc.php:32
 msgid "Language"
@@ -979,7 +962,7 @@ msgstr "Text und Bilder"
 
 #: ../mqtranslate_widget.inc.php:63
 msgid "Dropdown Box"
-msgstr "Dropdown Box"
+msgstr "Aufklapp-Menü"
 
 #: ../mqtranslate_wphacks.php:98
 #, fuzzy
@@ -1004,69 +987,67 @@ msgid "Title"
 msgstr "Titel"
 
 #: ../mqtranslate_wphacks.php:360 ../mqtranslate_wphacks.php:405
-#, fuzzy
 msgid "Read only"
-msgstr "Nur Text"
+msgstr "Schreibgeschützt"
 
 #: ../mqtranslate_xhaleera_addons.php:76
-#, fuzzy
 msgid "mqTranslate User Language Settings"
-msgstr "qTranslate Services Einstellungen"
+msgstr "mqTranslate Benutzer-Sprach-Einstellungen"
 
 #: ../mqtranslate_xhaleera_addons.php:87
 msgid "You can edit posts in"
-msgstr ""
+msgstr "Du kannst Beiträge ändern in"
 
 #: ../mqtranslate_xhaleera_addons.php:89
 msgid "This user can edit posts in"
-msgstr ""
+msgstr "Dieser Benutzer kann Beiträge ändern in"
 
 #: ../mqtranslate_xhaleera_addons.php:94
 #: ../mqtranslate_xhaleera_addons.php:103
-#, fuzzy
 msgid "No language available"
-msgstr "Die Sprache ist bereits deaktiviert!"
+msgstr "Keine Sprache verfügbar!"
 
 #: ../mqtranslate_xhaleera_addons.php:96
 msgid "As an Administrator, you can edit posts in all languages."
-msgstr ""
+msgstr "Als Administrator kannst du Beiträge in allen Sprachen ändern."
 
 #: ../mqtranslate_xhaleera_addons.php:98
 msgid "As an Administrator, this user can edit posts in all languages."
 msgstr ""
+"Als Administrator kann dieser Benutzer Beiträge in allen Sprachen ändern."
 
 #: ../mqtranslate_xhaleera_addons.php:119
 msgid "No language selected"
-msgstr ""
+msgstr "Keine Sprache ausgewählt"
 
 #: ../mqtranslate_xhaleera_addons.php:134
-#, fuzzy
 msgid "Master language"
-msgstr "Zielsprache"
+msgstr "Hauptsprache"
 
 #: ../mqtranslate_xhaleera_addons.php:137
 msgid "Not applicable to Administrators"
-msgstr ""
+msgstr "Nicht auf Administratoren anwendbar"
 
 #: ../mqtranslate_xhaleera_addons.php:150
 msgid "Language from which texts should be translated by this user"
-msgstr ""
+msgstr "Sprache aus welcher der Benutzer Texte übersetzen können soll"
 
 #: ../mqtranslate_xhaleera_addons.php:279
-#, fuzzy
 msgid "mqTranslate Team Settings"
-msgstr "qTranslate Services Einstellungen"
+msgstr "mqTranslate Team-Einstellungen"
 
 #: ../mqtranslate_xhaleera_addons.php:282
 msgid "User-level Language Protection"
-msgstr ""
+msgstr "Schutz der Sprache auf Benutzerebene"
 
 #: ../mqtranslate_xhaleera_addons.php:284
 msgid "Enable user-level language protection"
-msgstr ""
+msgstr "Sprache auf Benutzerebene schützen"
 
 #: ../mqtranslate_xhaleera_addons.php:286
 msgid ""
 "When enabled, this option allows you to select which language is editable on "
 "a user-level account basis."
 msgstr ""
+"Wenn aktiviert, erlaubt diese Option auf Benutzerebene auszuwählen welche "
+"Sprache geändert werden kann."
