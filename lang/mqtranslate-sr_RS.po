@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mqTranslate 2.5.34.2\n"
+"Project-Id-Version: mqTranslate 2.7\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-09-10 16:14+0200\n"
 "PO-Revision-Date: 2013-12-05 10:24+0100\n"
@@ -1050,53 +1050,3 @@ msgid ""
 "a user-level account basis."
 msgstr ""
 
-#~ msgid "Show"
-#~ msgstr "Prikaži"
-
-#~ msgid ""
-#~ "Adds userfriendly multilingual content support into Wordpress. For "
-#~ "Problems visit the <a href=\"http://www.qianqin.de/qtranslate/forum/"
-#~ "\">Support Forum</a>."
-#~ msgstr ""
-#~ "Ajoute l'aide userfriendly en matière de contenu multilingue à Wordpress. "
-#~ "Si vous avez des problèmes, visitez le <a href=\"http://www.qianqin.de/"
-#~ "qtranslate/forum/\">Forum d'aide</a>."
-
-#~ msgid "Category Name"
-#~ msgstr "Nom de la Catégorie"
-
-#~ msgid "Qian Qin"
-#~ msgstr "Qian Qin"
-
-#~ msgid "Tag Name"
-#~ msgstr "Nom du Tag"
-
-#~ msgid ""
-#~ "The qTranslate Editor could not be loaded because WYSIWYG/TinyMCE is not "
-#~ "activated in your profile."
-#~ msgstr ""
-#~ "L'éditeur qTranslate ne peut pas être chargé car l'option WYSIWYG/TinyMCE "
-#~ "n'est pas active pour votre profil."
-
-#~ msgid ""
-#~ "Your $wp_default_secret_key is mismatchting with your AUTH_KEY. This "
-#~ "might cause you not to be able to login anymore."
-#~ msgstr ""
-#~ "Votre $wp_default_secret_key ne correspond pas à votre AUTH_KEY. C'est "
-#~ "peut-être à cause de cela que vous n'arrivez plus à vous reconnecter."
-
-#~ msgid "http://www.qianqin.de"
-#~ msgstr "http://www.qianqin.de"
-
-#~ msgid "http://www.qianqin.de/qtranslate/"
-#~ msgstr "http://www.qianqin.de/qtranslate/"
-
-#~ msgid "language_name"
-#~ msgstr "Nom de la langue"
-
-#~ msgid ""
-#~ "multilingual, multi, language, admin, tinymce, qTranslate, Polyglot, "
-#~ "bilingual, widget, switcher"
-#~ msgstr ""
-#~ "multilingue, multi, mangue, admin, tinymce, qTranslate, Polyglot, "
-#~ "bilingue, widget, switcher"
