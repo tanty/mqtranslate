@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mqTranslate 2.5.34.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-30 00:09+0100\n"
+"POT-Creation-Date: 2014-09-10 16:14+0200\n"
 "PO-Revision-Date: 2014-06-30 00:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -990,7 +990,7 @@ msgstr "Texte et image"
 msgid "Dropdown Box"
 msgstr "Sélecteur"
 
-#: ../mqtranslate_wphacks.php:95
+#: ../mqtranslate_wphacks.php:98
 msgid ""
 "The mqTranslate Editor has disabled itself because it hasn't been tested "
 "with your Wordpress version yet. This is done to prevent Wordpress from "
@@ -1004,11 +1004,11 @@ msgstr ""
 "\"http://wordpress.org/plugins/mqtranslate/\" target=\"_blank\">mettre à "
 "jour</a> la version de mqTranslate."
 
-#: ../mqtranslate_wphacks.php:360
+#: ../mqtranslate_wphacks.php:358
 msgid "Title"
 msgstr "Titre"
 
-#: ../mqtranslate_wphacks.php:362 ../mqtranslate_wphacks.php:407
+#: ../mqtranslate_wphacks.php:360 ../mqtranslate_wphacks.php:405
 msgid "Read only"
 msgstr "Lecture seule"
 
