@@ -174,6 +174,8 @@ function qtrans_modifyRichEditor($old_content) {
 	$content_append .="document.getElementById('qtrans_select_".$q_config['default_language']."').className='wp-switch-editor switch-tmce switch-html';\n";
 	// show default language
 	$content_append .="var text = document.getElementById('".$id."').value;\n";
+	// when TinyMCE is displayed as the default editor, remove the automatically added paragraphs before initializing mqTranslate
+	$content_append .="if(getUserSetting( 'editor' ) == 'tinymce') { var text = switchEditors.pre_wpautop(text); }";
 	$content_append .="qtrans_assign('qtrans_textarea_".$id."',qtrans_use('".$q_config['default_language']."',text));\n";
 	
 	$content_append .="}\n";
