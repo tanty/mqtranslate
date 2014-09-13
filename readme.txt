@@ -74,6 +74,7 @@ For Problems with mqTranslate-specific features, visits [our Support Page](http:
 
 - Added option to remove inline CSS added in head
 - Imported original translations from qTranslate + improved German translation (thanks to michel.weimerskirch)
+- Fixed unwanted additional blank line at the top of the post when TinyMCE is the default editor (thanks to michel.weimerskirch)
 - Fixed untranslated texts
 
 2.7:
