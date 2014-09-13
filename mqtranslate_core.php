@@ -41,9 +41,13 @@ function qtrans_init() {
 		delete_option('mqtranslate_url_mode');
 		delete_option('mqtranslate_detect_browser_language');
 		delete_option('mqtranslate_hide_untranslated');
+		delete_option('mqtranslate_show_displayed_language_prefix');
 		delete_option('mqtranslate_auto_update_mo');
 		delete_option('mqtranslate_next_update_mo');
 		delete_option('mqtranslate_hide_default_language');
+		delete_option('mqtranslate_ul_lang_protection');
+		delete_option('mqtranslate_allowed_custom_post_types');
+		delete_option('mqtranslate_disable_header_css');
 		if(isset($_POST['mqtranslate_reset3'])) {
 			delete_option('mqtranslate_term_name');
 		}
@@ -142,6 +146,14 @@ function qtrans_init() {
 		foreach($alloptions as $option => $value) {
 			add_filter('option_'.$option, 'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
 		}
+	}
+	
+	// Disable CSS in head if applying
+	if ($q_config['disable_header_css']) {
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+			add_filter('mqtranslate_header_css', function($css) { return ''; });
+		else
+			add_filter('mqtranslate_header_css', create_function('$a', "return '';"));
 	}
 	
 	// load plugin translations
@@ -266,6 +278,7 @@ function qtrans_loadConfig() {
 	$term_name = get_option('mqtranslate_term_name');
 	$hide_default_language = get_option('mqtranslate_hide_default_language');
 	$allowed_custom_post_types = get_option('mqtranslate_allowed_custom_post_types');
+	$disable_header_css = get_option('mqtranslate_disable_header_css');
 	
 	// default if not set
 	if(!is_array($date_formats)) $date_formats = $q_config['date_format'];
@@ -295,6 +308,7 @@ function qtrans_loadConfig() {
 	$show_displayed_language_prefix = qtrans_validateBool($show_displayed_language_prefix, $q_config['show_displayed_language_prefix']);
 	$auto_update_mo = qtrans_validateBool($auto_update_mo, $q_config['auto_update_mo']);
 	$hide_default_language = qtrans_validateBool($hide_default_language, $q_config['hide_default_language']);
+	$disable_header_css = qtrans_validateBool($disable_header_css, $q_config['disable_header_css']);
 	
 	// url fix for upgrading users
 	$flag_location = trailingslashit(preg_replace('#^wp-content/#','',$flag_location));
@@ -323,6 +337,7 @@ function qtrans_loadConfig() {
 	$q_config['show_displayed_language_prefix'] = $show_displayed_language_prefix;
 	$q_config['term_name'] = $term_name;
 	$q_config['allowed_custom_post_types'] = $allowed_custom_post_types;
+	$q_config['disable_header_css'] = $disable_header_css;
 	
 	do_action('mqtranslate_loadConfig');
 }
@@ -367,6 +382,7 @@ function qtrans_saveConfig() {
 		update_option('mqtranslate_hide_default_language', '0');
 	
 	update_option('mqtranslate_allowed_custom_post_types', implode(',', $q_config['allowed_custom_post_types']));
+	update_option('mqtranslate_disable_header_css', $q_config['disable_header_css'] ? '1' : '0');
 		
 	do_action('mqtranslate_saveConfig');
 }
