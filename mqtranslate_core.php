@@ -149,12 +149,8 @@ function qtrans_init() {
 	}
 	
 	// Disable CSS in head if applying
-	if ($q_config['disable_header_css']) {
-		if (version_compare(PHP_VERSION, '5.3', '>='))
-			add_filter('mqtranslate_header_css', function($css) { return ''; });
-		else
-			add_filter('mqtranslate_header_css', create_function('$a', "return '';"));
-	}
+	if ($q_config['disable_header_css'])
+		add_filter('mqtranslate_header_css', create_function('$a', "return '';"));
 	
 	// load plugin translations
 	load_plugin_textdomain('mqtranslate', false, dirname(plugin_basename( __FILE__ )).'/lang');

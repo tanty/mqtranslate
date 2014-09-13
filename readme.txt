@@ -3,7 +3,7 @@ Contributors: chsxf, michel.weimerskirch
 Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: 2.7.1
+Stable tag: 2.7.1.1
 Donate Link: http://www.xhaleera.com/
 License: GPLv2
 
@@ -69,6 +69,10 @@ For Problems with mqTranslate-specific features, visits [our Support Page](http:
 3. qTranslate Services (Translation)
 
 == Changelog ==
+
+2.7.1.1:
+
+- Fixed syntax error with PHP versions < 5.3
 
 2.7.1:
 
