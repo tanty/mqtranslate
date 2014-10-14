@@ -240,14 +240,12 @@ function qtrans_initJS() {
 	
 	$q_config['js']['qtrans_updateTinyMCE'] = "
 		(function() {
-			for (var i in tinyMCEPreInit.qtInit) {
-				var tmp = tinyMCEPreInit.qtInit[i];
-				tmp.id = 'qtrans_textarea_'+tmp.id;
-				tinyMCEPreInit.qtInit[tmp.id] = tmp;
-				delete tinyMCEPreInit.qtInit[i];
-				jQuery('#ed_toolbar').hide();
-			}
-			
+			var tmp = tinyMCEPreInit.qtInit['content'];
+			tmp.id = 'qtrans_textarea_'+tmp.id;
+			tinyMCEPreInit.qtInit[tmp.id] = tmp;
+			delete tinyMCEPreInit.qtInit['content'];
+			jQuery('#ed_toolbar').hide();
+
 			var hook = tinyMCEPreInit.mceInit['content'];
 			if (hook)
 			{
