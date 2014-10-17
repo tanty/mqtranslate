@@ -119,7 +119,7 @@ function qtrans_init() {
 				if(strlen($language)>2) $language = substr($language,0,2);
 				if(qtrans_isEnabled($language)) {
 					if($q_config['hide_default_language'] && $language == $q_config['default_language']) break;
-					$target = qtrans_convertURL(get_option('home'),$language);
+					$target = qtrans_convertURL(qtrans_getHome(),$language);
 					break;
 				}
 			}
@@ -159,6 +159,17 @@ function qtrans_init() {
 	$q_config['url_info']['url'] = qtrans_convertURL(add_query_arg('lang',$q_config['default_language'],$q_config['url_info']['url']));
 }
 
+// returns the home in HTTP or HTTPS depending on the request
+function qtrans_getHome() {
+       $home = get_option('home');
+       if(is_ssl()) {
+               $home = str_replace('http://', 'https://', $home);
+       } else {
+               $home = str_replace('https://', 'http://', $home);
+       }
+       return $home;
+}
+
 function qtrans_postInit() {
 	// init Javascript functions
 	qtrans_initJS();
@@ -170,7 +181,7 @@ function qtrans_postInit() {
 // returns cleaned string and language information
 function qtrans_extractURL($url, $host = '', $referer = '') {
 	global $q_config;
-	$home = qtrans_parseURL(get_option('home'));
+	$home = qtrans_parseURL(qtrans_getHome());
 	$home['path'] = trailingslashit($home['path']);
 	$referer = qtrans_parseURL($referer);
 	
@@ -634,7 +645,7 @@ function qtrans_convertURL($url='', $lang='', $forceadmin = false, $forceaddlang
 	
 	// check if it's an external link
 	$urlinfo = qtrans_parseURL($url);
-	$home = rtrim(get_option('home'),"/");
+	$home = rtrim(qtrans_getHome(),"/");
 	if($urlinfo['host']!='') {
 		// check for already existing pre-domain language information
 		if($q_config['url_mode'] == QT_URL_DOMAIN && preg_match("#^([a-z]{2}).#i",$urlinfo['host'],$match)) {
