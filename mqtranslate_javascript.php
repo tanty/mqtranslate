@@ -250,11 +250,16 @@ function qtrans_initJS() {
 			if (hook)
 			{
 				// Removing WPFullscreen plugin and button
-				var p = hook.plugins.split(',').filter(function(element) { return (element != 'wpfullscreen'); });
-				hook.plugins = p.join(',');
-				p = hook.toolbar1.split(',').filter(function(element) { return (element != 'wp_fullscreen'); });
-				hook.toolbar1 = p.join(',');
-				
+				var p;
+				if ( typeof hook.plugins != 'undefined' ) {
+					p = hook.plugins.split(',').filter(function(element) { return (element != 'wpfullscreen'); });
+					hook.plugins = p.join(',');
+				}
+				if ( typeof hook.toolbar1 != 'undefined' ) {
+					p = hook.toolbar1.split(',').filter(function(element) { return (element != 'wp_fullscreen'); });
+					hook.toolbar1 = p.join(',');
+				}
+
 				hook.elements='hook-to-nothing';
 				hook.selector = '#qtrans_textarea_content';
 				delete tinyMCEPreInit.mceInit['content'];
@@ -361,7 +366,12 @@ function qtrans_initJS() {
 	";
 	
 	$q_config['js']['qtrans_switch'] = "
+		switchEditors.go_original = switchEditors.go;
 		switchEditors.go = function(id, lang) {
+			if (id != 'content' ) {
+				switchEditors.go_original(id);
+				return;
+			}
 			id = id || 'qtrans_textarea_content';
 			lang = lang || 'toggle';
 			
