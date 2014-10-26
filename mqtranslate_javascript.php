@@ -240,23 +240,26 @@ function qtrans_initJS() {
 	
 	$q_config['js']['qtrans_updateTinyMCE'] = "
 		(function() {
-			for (var i in tinyMCEPreInit.qtInit) {
-				var tmp = tinyMCEPreInit.qtInit[i];
-				tmp.id = 'qtrans_textarea_'+tmp.id;
-				tinyMCEPreInit.qtInit[tmp.id] = tmp;
-				delete tinyMCEPreInit.qtInit[i];
-				jQuery('#ed_toolbar').hide();
-			}
-			
+			var tmp = tinyMCEPreInit.qtInit['content'];
+			tmp.id = 'qtrans_textarea_'+tmp.id;
+			tinyMCEPreInit.qtInit[tmp.id] = tmp;
+			delete tinyMCEPreInit.qtInit['content'];
+			jQuery('#ed_toolbar').hide();
+
 			var hook = tinyMCEPreInit.mceInit['content'];
 			if (hook)
 			{
 				// Removing WPFullscreen plugin and button
-				var p = hook.plugins.split(',').filter(function(element) { return (element != 'wpfullscreen'); });
-				hook.plugins = p.join(',');
-				p = hook.toolbar1.split(',').filter(function(element) { return (element != 'wp_fullscreen'); });
-				hook.toolbar1 = p.join(',');
-				
+				var p;
+				if ( typeof hook.plugins != 'undefined' ) {
+					p = hook.plugins.split(',').filter(function(element) { return (element != 'wpfullscreen'); });
+					hook.plugins = p.join(',');
+				}
+				if ( typeof hook.toolbar1 != 'undefined' ) {
+					p = hook.toolbar1.split(',').filter(function(element) { return (element != 'wp_fullscreen'); });
+					hook.toolbar1 = p.join(',');
+				}
+
 				hook.elements='hook-to-nothing';
 				hook.selector = '#qtrans_textarea_content';
 				delete tinyMCEPreInit.mceInit['content'];
@@ -363,7 +366,12 @@ function qtrans_initJS() {
 	";
 	
 	$q_config['js']['qtrans_switch'] = "
+		switchEditors.go_original = switchEditors.go;
 		switchEditors.go = function(id, lang) {
+			if (id != 'content' ) {
+				switchEditors.go_original(id);
+				return;
+			}
 			id = id || 'qtrans_textarea_content';
 			lang = lang || 'toggle';
 			
