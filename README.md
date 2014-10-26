@@ -72,7 +72,7 @@ Changelog
 
 - Fixed potential bug with HTTPS (thanks to twisterss)
 - Fixed bug affecting quicktags initialization on editor instances other than "content" (thanks to Marco Chiesi)
-- Updated Portuguese (Portugal pt_PT) language files
+- Updated Portuguese (Portugal pt_PT) language files (thanks to Pedro Mendonça)
 
 2.7.1.1:
 
