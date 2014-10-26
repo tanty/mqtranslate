@@ -49,7 +49,7 @@ Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bili
 	es by June
 	vi by hathhai
 	ar by Mohamed Magdy
-	pt by netolazaro
+	pt by netolazaro and Pedro Mendonça
 	gl by Andrés Bott
 	sr by Borisa Djuraskovic from WebHostingHub <http://www.webhostinghub.com>
 	
