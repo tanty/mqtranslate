@@ -48,6 +48,7 @@ function qtrans_init() {
 		delete_option('mqtranslate_ul_lang_protection');
 		delete_option('mqtranslate_allowed_custom_post_types');
 		delete_option('mqtranslate_disable_header_css');
+		delete_option('mqtranslate_use_secure_cookie');
 		if(isset($_POST['mqtranslate_reset3'])) {
 			delete_option('mqtranslate_term_name');
 		}
@@ -82,12 +83,12 @@ function qtrans_init() {
 	$q_config['url_info'] = qtrans_extractURL($_SERVER['REQUEST_URI'], $_SERVER["HTTP_HOST"], isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 	
 	// set test cookie
-	setcookie('qtrans_cookie_test', 'mqTranslate Cookie Test', 0, $q_config['url_info']['home'], $q_config['url_info']['host']);
+	setcookie('qtrans_cookie_test', 'mqTranslate Cookie Test', 0, $q_config['url_info']['home'], $q_config['url_info']['host'], !empty($q_config['use_secure_cookie']));
 	// check cookies for admin
 	if(defined('WP_ADMIN')) {
 		if(isset($_GET['lang']) && qtrans_isEnabled($_GET['lang'])) {
 			$q_config['language'] = $q_config['url_info']['language'];
-			setcookie('qtrans_admin_language', $q_config['language'], time()+60*60*24*30);
+			setcookie('qtrans_admin_language', $q_config['language'], time()+60*60*24*30, !empty($q_config['use_secure_cookie']));
 		} elseif(isset($_COOKIE['qtrans_admin_language']) && qtrans_isEnabled($_COOKIE['qtrans_admin_language'])) {
 			$q_config['language'] = $_COOKIE['qtrans_admin_language'];
 		} else {
@@ -286,6 +287,7 @@ function qtrans_loadConfig() {
 	$hide_default_language = get_option('mqtranslate_hide_default_language');
 	$allowed_custom_post_types = get_option('mqtranslate_allowed_custom_post_types');
 	$disable_header_css = get_option('mqtranslate_disable_header_css');
+	$use_secure_cookie = get_option('mqtranslate_use_secure_cookie');
 	
 	// default if not set
 	if(!is_array($date_formats)) $date_formats = $q_config['date_format'];
@@ -316,6 +318,7 @@ function qtrans_loadConfig() {
 	$auto_update_mo = qtrans_validateBool($auto_update_mo, $q_config['auto_update_mo']);
 	$hide_default_language = qtrans_validateBool($hide_default_language, $q_config['hide_default_language']);
 	$disable_header_css = qtrans_validateBool($disable_header_css, $q_config['disable_header_css']);
+	$use_secure_cookie = qtrans_validateBool($use_secure_cookie, $q_config['use_secure_cookie']);
 	
 	// url fix for upgrading users
 	$flag_location = trailingslashit(preg_replace('#^wp-content/#','',$flag_location));
@@ -345,6 +348,7 @@ function qtrans_loadConfig() {
 	$q_config['term_name'] = $term_name;
 	$q_config['allowed_custom_post_types'] = $allowed_custom_post_types;
 	$q_config['disable_header_css'] = $disable_header_css;
+	$q_config['use_secure_cookie'] = $use_secure_cookie;
 	
 	do_action('mqtranslate_loadConfig');
 }
@@ -390,6 +394,7 @@ function qtrans_saveConfig() {
 	
 	update_option('mqtranslate_allowed_custom_post_types', implode(',', $q_config['allowed_custom_post_types']));
 	update_option('mqtranslate_disable_header_css', $q_config['disable_header_css'] ? '1' : '0');
+	update_option('mqtranslate_use_secure_cookie', $q_config['use_secure_cookie'] ? '1' : '0');
 		
 	do_action('mqtranslate_saveConfig');
 }

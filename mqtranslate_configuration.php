@@ -231,6 +231,7 @@ function mqtranslate_conf() {
 		qtrans_checkSetting('auto_update_mo',			true, QT_BOOLEAN);
 		qtrans_checkSetting('hide_default_language',	true, QT_BOOLEAN);
 		qtrans_checkSetting('disable_header_css',		true, QT_BOOLEAN);
+		qtrans_checkSetting('use_secure_cookie', 		true, QT_BOOLEAN);
 		
 		if (isset($_POST['allowed_custom_post_types']))
 		{
@@ -540,9 +541,17 @@ function mqtranslate_conf() {
 			<tr valign="top">
 				<th scope="row"><?php _e('Remove plugin CSS from head', 'mqtranslate'); ?></th>
 				<td>
-					<label for="disable_header_css"><input type="checkbox" name="disable_header_css" id="disable_header_css" value="1"<?php echo empty($q_config['disable_header_css']) ? '' : ' checked="checked"' ?>" /> <?php _e('Remove inline CSS code added by plugin from the head', 'mqtranslate'); ?></label>
+					<label for="disable_header_css"><input type="checkbox" name="disable_header_css" id="disable_header_css" value="1"<?php echo empty($q_config['disable_header_css']) ? '' : ' checked="checked"' ?> /> <?php _e('Remove inline CSS code added by plugin from the head', 'mqtranslate'); ?></label>
 					<br />
 					<small><?php _e('This will remove default styles applyied to mqTranslate Language Chooser', 'mqtranslate') ?></small>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><?php _e('Use Secure Cookie', 'mqtranslate'); ?></th>
+				<td>
+					<label for="use_secure_cookie"><input type="checkbox" name="use_secure_cookie" id="use_secure_cookie" value="1"<?php echo empty($q_config['use_secure_cookie']) ? '' : ' checked="checked"' ?> /> <?php _e('Make mqTranslate cookie available only through HTTPS connections', 'mqtranslate'); ?> </label>
+					<br />
+					<small><?php _e("Don't check this if you don't know what you're doing!", 'mqtranslate') ?></small>
 				</td>
 			</tr>
 			<tr valign="top">

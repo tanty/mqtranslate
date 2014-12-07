@@ -235,6 +235,7 @@ function qtrans_initJS() {
 		jQuery('.wp-editor-wrap').unbind('mousedown');
 		jQuery('.wp-editor-wrap').mousedown(function(e){
 			wpActiveEditor = 'qtrans_textarea_'+this.id.slice(3, -5);
+			jQuery('#insert-media-button').data('editor', 'qtrans_textarea_' + this.id.slice(3, -5));
 		});
 		";
 	
