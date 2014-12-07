@@ -3,8 +3,8 @@ mqTranslate
 Contributors: chsxf, michel.weimerskirch  
 Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human  
 Requires at least: 3.9  
-Tested up to: 4.0  
-Stable tag: 2.8  
+Tested up to: 4.1-beta2-30771  
+Stable tag: 2.9  
 Donate Link: http://www.xhaleera.com/  
 License: GPLv2
 
@@ -67,6 +67,12 @@ For Problems with mqTranslate-specific features, visits [our Support Page](http:
 
 Changelog
 ---------
+
+2.9:
+
+- Support for WordPress 4.1
+- Fixed mislocation of inserted media in the wrong languages when using the text editor
+- Added option for secure cookies
 
 2.8:
 

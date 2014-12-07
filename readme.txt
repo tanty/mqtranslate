@@ -2,7 +2,7 @@
 Contributors: chsxf, michel.weimerskirch
 Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
 Requires at least: 3.9
-Tested up to: 4.1
+Tested up to: 4.1-beta2-30771
 Stable tag: 2.9
 Donate Link: http://www.xhaleera.com/
 License: GPLv2
