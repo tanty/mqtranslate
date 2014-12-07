@@ -3,7 +3,7 @@
 Plugin Name: mqTranslate
 Plugin URI: http://wordpress.org/plugins/mqtranslate/
 Description: Adds userfriendly multilingual content support into Wordpress. mqTranslate is a fork of the well-known <a href="http://www.qianqin.de/mqtranslate/">qTranslate</a> plugin by <a href="http://www.qianqin.de/">Qian Qin</a>, extending the original software with collaborative and team-oriented features.
-Version: 2.9
+Version: 2.8
 Author: xhaleera
 Author URI: http://www.xhaleera.com
 Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
@@ -49,8 +49,9 @@ Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bili
 	es by June
 	vi by hathhai
 	ar by Mohamed Magdy
-	pt by netolazaro and Pedro Mendonça
+	pt by netolazaro
 	gl by Andrés Bott
+	sr by Borisa Djuraskovic from WebHostingHub <http://www.webhostinghub.com>
 	
 	Plugin Translation Contributers
 	===============================
@@ -81,7 +82,6 @@ Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bili
 	Sponsored Features
 	==================
 	Excerpt Translation by bastiaan van rooden (www.nothing.ch)
-	sr translation by Borisa Djuraskovic from WebHostingHub <http://www.webhostinghub.com>
 
 	Specials thanks
 	===============
@@ -94,7 +94,7 @@ Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bili
 // mqTranslate Editor will only activated for the given version of Wordpress.
 // Can be changed to use with other versions but might cause problems and/or data loss!
 define('QT_MIN_SUPPORTED_WP_MINOR_VERSION', '3.9');
-define('QT_MAX_SUPPORTED_WP_MAJOR_VERSION', '4.1');
+define('QT_MAX_SUPPORTED_WP_MAJOR_VERSION', '4.0');
 define('QT_STRING',		1);
 define('QT_BOOLEAN',	2);
 define('QT_INTEGER',	3);
@@ -469,9 +469,6 @@ $q_config['allowed_custom_post_types'] = array();
 
 // Disable CSS in head
 $q_config['disable_header_css'] = 0;
-
-// Use secure cookie
-$q_config['use_secure_cookie'] = 0;
 
 // Load mqTranslate
 require_once(dirname(__FILE__)."/mqtranslate_javascript.php");
