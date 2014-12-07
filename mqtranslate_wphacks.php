@@ -397,7 +397,7 @@ function qtrans_insertTitleInput($language){
 }
 
 function qtrans_createEditorToolbarButton($language, $id, $js_function = 'switchEditors.go', $label = ''){
-	global $q_config;
+	global $q_config, $wp_version;
 	
 	$cu = wp_get_current_user();
 	$editable = ($cu->has_cap('edit_users') || mqtrans_currentUserCanEdit($language));
@@ -406,17 +406,27 @@ function qtrans_createEditorToolbarButton($language, $id, $js_function = 'switch
 	if (!$editable)
 		$title .= ' - ' . __('Read only', 'mqtranslate');
 	
-	$html = "
-		var bc = document.getElementById('wp-".$id."-editor-tools');
-		var mb = document.getElementById('wp-".$id."-media-buttons');
-		var ls = document.createElement('a');
-		var l = document.createTextNode('{$title}');
-		ls.id = 'qtrans_select_".$language."';
-		ls.className = 'wp-switch-editor';
-		ls.onclick = function() { ".$js_function."('".$id."','".$language."'); };
-		ls.appendChild(l);
-		bc.insertBefore(ls,mb);
-		";
+	if (version_compare($wp_version, '4.1-beta', '<'))
+	{
+		$html = "
+			var bc = document.getElementById('wp-".$id."-editor-tools');
+			var mb = document.getElementById('wp-".$id."-media-buttons');
+			var ls = document.createElement('a');
+			var l = document.createTextNode('{$title}');
+			ls.id = 'qtrans_select_".$language."';
+			ls.className = 'wp-switch-editor';
+			ls.onclick = function() { ".$js_function."('".$id."','".$language."'); };
+			ls.appendChild(l);
+			bc.insertBefore(ls,mb);
+			";
+	}
+	else {
+		$html = "
+			var before = jQuery('#{$id}-html');
+			var html = '<button id=\"qtrans_select_{$language}\" class=\"wp-switch-editor\" onclick=\"{$js_function}(\'{$id}\', \'{$language}\');\" type=\"button\">{$title}</button>';
+			jQuery(html).insertAfter(before);
+			";
+	}
 	return $html;
 }
 ?>
