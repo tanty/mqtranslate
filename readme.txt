@@ -2,7 +2,7 @@
 Contributors: chsxf, michel.weimerskirch
 Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
 Requires at least: 3.9
-Tested up to: 4.1-beta2-30771
+Tested up to: 4.1
 Stable tag: 2.9
 Donate Link: http://www.xhaleera.com/
 License: GPLv2
@@ -43,16 +43,23 @@ Flags in flags directory are made by Luc Balemans and downloaded from FOTW Flags
 
 == Installation ==
 
-**IMPORTANT NOTE:** Please disable qTranslate if it is installed and active before activating mqTranslate.
-
 Installation of this plugin is fairly easy:
 
-1. Download the plugin from [here](http://wordpress.org/plugins/mqtranslate/ "the WordPress Plugin Repository").
-1. Extract all the files.
-1. Upload everything (keeping the directory structure) to the `/wp-content/plugins/` directory.
-1. There should be a `/wp-content/plugins/mqtranslate` directory now with `mqtranslate.php` in it.
-1. Activate the plugin through the 'Plugins' menu in WordPress.
-1. Add the mqTranslate Widget to let your visitors switch the language.
+* As with any plugin update / installation, save your database.
+* Install mqTranslate through the plugins administration panel, **but don't activate it yet**.
+
+If your install already includes qTranslate, follow these steps:
+
+* Disable qTranslate but keep it installed for the moment
+* Activate mqTranslate
+* Go to mqTranslate Languages settings page and use our settings migration to copy qTranslate original settings automatically
+* Enable mqTranslate and check everything works fine. If not, disable the plugin and enable qTranslate again. If yes, you can remove mqTranslate installation (but I suggest you keep it as it is harmless once disabled and it can help you if you discover later bugs with mqTranslate).
+* Add the mqTranslate Widget to let your visitors switch the language.
+
+If your install does not include qTranslate, you can go with it:
+
+* Activate mqTranslate
+* Add the mqTranslate Widget to let your visitors switch the language.
 
 == Frequently Asked Questions ==
 
