@@ -86,7 +86,7 @@ function qtrans_init() {
 	
 	// set test cookie
 	if (empty($q_config['disable_client_cookies']) || defined('WP_ADMIN'))
-		setcookie('qtrans_cookie_test', 1, 0, NULL, NULL, !empty($q_config['use_secure_cookie']));
+		setcookie('qtrans_cookie_test', 1, 0, $q_config['url_info']['home'], $q_config['url_info']['host_wo_port'], !empty($q_config['use_secure_cookie']));
 	// check cookies for admin
 	if(defined('WP_ADMIN')) {
 		if(isset($_GET['lang']) && qtrans_isEnabled($_GET['lang'])) {
@@ -103,7 +103,7 @@ function qtrans_init() {
 				|| (($q_config['url_info']['language'] != $q_config['default_language'] || $q_config['url_info']['explicit_default_language']) && $q_config['url_info']['language'] != $_COOKIE['qtrans_client_language'])) {
 			qtrans_setLanguage($q_config['url_info']['language']);
 			if (empty($q_config['disable_client_cookies']))
-				setcookie('qtrans_client_language', $q_config['language'], time() + 86400 * 30, NULL, NULL, !empty($q_config['use_secure_cookie']));
+				setcookie('qtrans_client_language', $q_config['language'], time() + 86400 * 30, $q_config['url_info']['home'], $q_config['url_info']['host_wo_port'], !empty($q_config['use_secure_cookie']));
 		}
 		else
 			qtrans_setLanguage($_COOKIE['qtrans_client_language']);
@@ -273,6 +273,8 @@ function qtrans_extractURL($url, $host = '', $referer = '') {
 			}
 		}
 	}
+	
+	$result['host_wo_port'] = preg_replace('#:.+$#', '', $result['host']);
 	
 	return $result;
 }
