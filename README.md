@@ -80,6 +80,7 @@ Changelog
 - Improved activation process in case qTranslate or another fork is already active
 - Added client-side cookie to memorize language selection
 - Added optimization settings section (first setting allows disabling the filtering of all WordPress options)
+- Fixed potential bug with ACF additional wysiwyg fields (thanks to Fabien MOTTA from com1fruit.com)
 
 2.9:
 
