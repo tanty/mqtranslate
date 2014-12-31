@@ -552,10 +552,12 @@ function mqtranslate_conf() {
 				<th scope="row"><?php _e('Cookie Settings', 'mqtranslate'); ?></th>
 				<td>
 					<label for="disable_client_cookies"><input type="checkbox" name="disable_client_cookies" id="disable_client_cookies" value="1"<?php echo empty($q_config['disable_client_cookies']) ? '' : ' checked="checked"' ?> /> <?php _e('Disable all client cookies', 'mqtranslate'); ?> </label>
+					<!-- 
 					<br />
 					<small><?php _e("If checked, language will not be saved for visitors between sessions.", 'mqtranslate') ?></small>
+					-->
 					<br /><br />
-				
+					
 					<label for="use_secure_cookie"><input type="checkbox" name="use_secure_cookie" id="use_secure_cookie" value="1"<?php echo empty($q_config['use_secure_cookie']) ? '' : ' checked="checked"' ?> /> <?php _e('Make mqTranslate cookie available only through HTTPS connections', 'mqtranslate'); ?> </label>
 					<br />
 					<small><?php _e("Don't check this if you don't know what you're doing!", 'mqtranslate') ?></small>

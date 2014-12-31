@@ -3,7 +3,7 @@ Contributors: chsxf, michel.weimerskirch
 Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
 Requires at least: 3.9
 Tested up to: 4.1
-Stable tag: 2.9.1
+Stable tag: 2.9.1.1
 Donate Link: http://www.xhaleera.com/
 License: GPLv2
 
@@ -76,6 +76,10 @@ For Problems with mqTranslate-specific features, visits [our Support Page](http:
 3. qTranslate Services (Translation)
 
 == Changelog ==
+
+2.9.1.1:
+
+- [REVERTED] Added client-side cookie to memorize language selection (this feature created a bug in qtranslate slug)
 
 2.9.1:
 
