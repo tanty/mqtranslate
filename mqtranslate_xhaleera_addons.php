@@ -241,8 +241,14 @@ function mqtrans_postUpdated($post_ID, $after, $before) {
 }
 
 function mqtrans_filterHomeURL($url, $path, $orig_scheme, $blog_id) {
-	global $q_config;
-	return ((empty($path) && $q_config['url_mode'] == QT_URL_PATH) || $path == '/' || !empty($q_config['url_info']['explicit_default_language'])) ? qtrans_convertURL($url, '', false, $q_config['url_info']['explicit_default_language']) : $url;
+	if (defined('QTRANS_INIT'))
+	{
+		global $q_config;
+		$expDefaultLanguage = !empty($q_config['url_info']['explicit_default_language']);
+		return ((empty($path) && $q_config['url_mode'] == QT_URL_PATH) || $path == '/' || $expDefaultLanguage) ? qtrans_convertURL($url, '', false, $expDefaultLanguage) : $url;
+	}
+	else
+		return $url;
 }
 
 function mqtrans_filterPostMetaData($original_value, $object_id, $meta_key, $single) {

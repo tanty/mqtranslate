@@ -34,7 +34,7 @@ function qtrans_header(){
 		$css .=".qtrans_flag_".$language." { background:url(".$baseurl.'/'.$q_config['flag_location'].$q_config['flag'][$language].") no-repeat }\n";
 	}
 	$css .="</style>\n";
-	echo apply_filters('mqtranslate_header_css',$css);
+	
 	// skip the rest if 404
 	if(is_404()) return;
 	// set links to translations of current page
@@ -234,7 +234,7 @@ function qtrans_fixAdminBar($wp_admin_bar) {
 
 // Hooks for Plugin compatibility
 
-function wpsupercache_supercache_dir($uri) {
+function qtrans_supercache_dir($uri) {
 	global $q_config;
 	if(isset($q_config['url_info']['original_url'])) {
 		$uri = $q_config['url_info']['original_url'];
@@ -246,23 +246,16 @@ function wpsupercache_supercache_dir($uri) {
 	$uri = strtolower(preg_replace('/:.*$/', '',  $_SERVER["HTTP_HOST"])) . $uri; // To avoid XSS attacs
 	return $uri;
 }
-add_filter('supercache_dir',					'wpsupercache_supercache_dir',0);
+add_filter('supercache_dir',					'qtrans_supercache_dir',0);
 
 // Hooks (Actions)
 add_action('wp_head',						'qtrans_header');
-add_action('category_edit_form',			'qtrans_modifyTermFormFor');
-add_action('post_tag_edit_form',			'qtrans_modifyTermFormFor');
-add_action('link_category_edit_form',		'qtrans_modifyTermFormFor');
-add_action('category_add_form',				'qtrans_modifyTermFormFor');
-add_action('post_tag_add_form',				'qtrans_modifyTermFormFor');
-add_action('link_category_add_form',		'qtrans_modifyTermFormFor');
 add_action('widgets_init',					'qtrans_widget_init'); 
 add_action('plugins_loaded',				'qtrans_init', 2);
 add_action('init', 							'qtrans_postInit');
 add_action('admin_head',					'qtrans_adminHeader');
 add_action('admin_menu',					'qtrans_adminMenu');
 add_action('wp_before_admin_bar_render',	'qtrans_fixAdminBar');
-add_action('wp_tiny_mce_init', 				'qtrans_TinyMCE_init');
 
 // Hooks (execution time critical filters) 
 add_filter('the_content',					'qtrans_useCurrentLanguageIfNotFoundShowAvailable', 0);
@@ -279,6 +272,7 @@ add_filter('get_the_date',					'qtrans_dateFromPostForCurrentLanguage',0,2);
 add_filter('get_the_modified_date',			'qtrans_dateModifiedFromPostForCurrentLanguage',0,2);
 add_filter('locale',						'qtrans_localeForCurrentLanguage',99);
 add_filter('the_title',						'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage', 0);
+add_filter('post_title',					'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage', 0);
 add_filter('term_name',						'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
 add_filter('tag_rows',						'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
 add_filter('list_cats',						'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
@@ -337,15 +331,29 @@ add_filter('comment_notification_text', 	'qtrans_useCurrentLanguageIfNotFoundUse
 add_filter('comment_notification_headers',	'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
 add_filter('comment_notification_subject',	'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
 
-add_filter('the_editor',					'qtrans_modifyRichEditor');
-add_filter('admin_footer',					'qtrans_modifyExcerpt');
 add_filter('bloginfo_url',					'qtrans_convertBlogInfoURL',10,2);
 add_filter('plugin_action_links', 			'qtrans_links', 10, 2);
 add_filter('manage_language_columns',		'qtrans_language_columns');
 add_filter('core_version_check_locale',		'qtrans_versionLocale');
 add_filter('redirect_canonical',			'qtrans_checkCanonical', 10, 2);
+
 // skip this filters if on backend
-if(!defined('WP_ADMIN')) {
+if (defined('WP_ADMIN')) {
+	add_action('admin_bar_menu',			'add_language_menu', 999);
+	
+	add_filter('admin_head',				'qtrans_add_css');
+	add_filter('admin_head',				'qtrans_add_admin_lang_icons');
+	
+	add_filter('admin_head',				'qtrans_add_config');
+	add_filter('admin_head',				'qtrans_add_js');
+	
+	add_filter('get_term',					'qtrans_useAdminTermLib',0);
+	add_filter('get_terms',					'qtrans_useAdminTermLib',0);
+}
+else {
+	add_filter('wp_head',					'qtrans_add_css');
+	add_filter('wp_head',					'qtrans_add_lang_icons');
+		
 	add_filter('the_posts',					'qtrans_postsFilter');
 	add_filter('wp_setup_nav_menu_item',	'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
 	
@@ -371,6 +379,6 @@ if(!defined('WP_ADMIN')) {
 	add_filter('get_category',				'qtrans_useTermLib',0);
 	add_filter('get_comment_author',		'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
 	add_filter('the_author',				'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
+	
+	add_filter('tml_title',					'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
 }
-
-?>

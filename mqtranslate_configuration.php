@@ -17,30 +17,29 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+function qtrans_add_admin_lang_icons ()
+{
+	global $q_config;
+	?>
+<style type="text/css" media="screen">
+/* <![CDATA[ */
+	#wpadminbar #wp-admin-bar-language > div.ab-item {
+		background-image: url('<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$q_config['language']]; ?>');
+	}
+<?php foreach ($q_config['enabled_languages'] as $language) : ?>
+	#wpadminbar ul li#wp-admin-bar-<?php echo $language ?> {
+		background-image: url('<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$language]; ?>');
+	}
+<?php endforeach; ?>
+/* ]]> */
+</style>
+<?php 
+}
+
 /* mqTranslate Management Interface */
 function qtrans_adminMenu() {
-	global $menu, $submenu, $q_config;
-	
 	/* Configuration Page */
 	add_options_page(__('Language Management', 'mqtranslate'), __('Languages', 'mqtranslate'), 'manage_options', 'mqtranslate', 'mqtranslate_conf');
-	
-	/* Language Switcher for Admin */
-	
-	// don't display menu if there is only 1 language active
-	if(sizeof($q_config['enabled_languages']) <= 1) return;
-	
-	// generate menu with flags for every enabled language
-	foreach($q_config['enabled_languages'] as $id => $language) {
-		$link = add_query_arg('lang', $language);
-		$link = (strpos($link, "wp-admin/") === false) ? preg_replace('#[^?&]*/#i', '', $link) : preg_replace('#[^?&]*wp-admin/#i', '', $link);
-		if(strpos($link, "?")===0||strpos($link, "index.php?")===0) {
-			if(current_user_can('manage_options')) 
-				$link = 'options-general.php?page=mqtranslate&godashboard=1&lang='.$language; 
-			else
-				$link = 'edit.php?lang='.$language;
-		}
-		add_menu_page(__($q_config['language_name'][$language], 'mqtranslate'), __($q_config['language_name'][$language], 'mqtranslate'), 'read', $link, NULL, trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$language]);
-	}
 }
 
 function mqtranslate_language_form($lang = '', $language_code = '', $language_name = '', $language_locale = '', $language_date_format = '', $language_time_format = '', $language_flag ='', $language_na_message = '', $language_default = '', $original_lang='') {
@@ -650,14 +649,42 @@ function mqtranslate_conf() {
 		</table>
 		<script type="text/javascript">
 		// <![CDATA[
+			function qtrans_getcookie(cname)
+			{
+				var nm = cname + "=";
+				var ca = document.cookie.split(';');
+				for (var i = 0; i < ca.length; i++) {
+					var c = ca[i];
+					var p = c.indexOf(nm);
+					if (p >= 0) return c.substring(p + nm.length, c.length);
+				}
+				return '';
+			}
+			
+			function qtrans_delcookie(cname)
+			{
+				var date = new Date();
+				date.setTime(date.getTime()-(24*60*60*1000));
+				document.cookie=cname+'=; expires='+date.toGMTString();
+			}
+			
 			function showAdvanced() {
-				var el = document.getElementById('mqtranslate-advanced');
-				if (el.style.display == 'block')
+				var el = document.getElementById('qtranslate-advanced');
+				if (el.style.display == 'block') {
+					qtrans_delcookie('ShowAdvanced');
 					el.style.display = 'none';
-				else
+				}
+				else {
+					document.cookie='ShowAdvanced=1';
 					el.style.display='block';
+				}
 				return false;
 			}
+			
+			if (qtrans_getcookie('ShowAdvanced'))
+				document.getElementById('qtranslate-advanced').style.display='block';
+			else
+				document.getElementById('qtranslate-advanced').style.display='none';
 		// ]]>
 		</script>
 <?php do_action('mqtranslate_configuration', $clean_uri); ?>
@@ -688,7 +715,7 @@ function mqtranslate_conf() {
 	</tr>
 	</tfoot>
 
-	<tbody id="the-list" class="list:cat">
+	<tbody id="the-list" class="qtranslate-language-list" class="list:cat">
 <?php foreach($q_config['language_name'] as $lang => $language){ if($lang!='code') { ?>
 	<tr>
 		<td><img src="<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$lang]; ?>" alt="<?php echo $language; ?> Flag"></td>
@@ -719,4 +746,62 @@ function mqtranslate_conf() {
 <?php
 }
 }
+
+/* Add a metabox in admin menu page */
+function qtrans_nav_menu_metabox( $object )
+{
+	global $nav_menu_selected_id;
+
+	$elems = array( '#qtransLangSwLM#' => __('Language Menu') );
+
+	class qtransLangSwItems {
+		public $db_id = 0;
+		public $object = 'qtranslangsw';
+		public $object_id;
+		public $menu_item_parent = 0;
+		public $type = 'custom';
+		public $title;
+		public $url;
+		public $target = '';
+		public $attr_title = '';
+		public $classes = array();
+		public $xfn = '';
+	}
+
+	$elems_obj = array();
+	foreach ( $elems as $value => $title ) {
+		$elems_obj[$title] = new qtransLangSwItems();
+		$elems_obj[$title]->object_id	= esc_attr( $value );
+		$elems_obj[$title]->title		= esc_attr( $title );
+		$elems_obj[$title]->url			= esc_attr( $value );
+	}
+
+	$walker = new Walker_Nav_Menu_Checklist( array() );
 ?>
+<div id="qtrans-langsw" class="qtranslangswdiv">
+	<div id="tabs-panel-qtrans-langsw-all" class="tabs-panel tabs-panel-view-all tabs-panel-active">
+		<ul id="qtrans-langswchecklist" class="list:qtrans-langsw categorychecklist form-no-clear">
+			<?php echo walk_nav_menu_tree( array_map( 'wp_setup_nav_menu_item', $elems_obj ), 0, (object)array( 'walker' => $walker ) ); ?>
+		</ul>
+	</div>
+	<span class="list-controls hide-if-no-js">
+		<a href="javascript:void(0);" class="help" onclick="jQuery( '#help-login-links' ).toggle();"><?php _e( 'Help' ); ?></a>
+		<span class="hide-if-js" id="help-login-links"><br /><a name="help-login-links"></a>
+		Menu item added is replaced with a sub-menu of available languages when menu is rendered. No customization is available, except class entries in qtranslate.css for .qtrans-lang-menu and .qtrans-lang-menu-item.
+		</span>
+	</span>
+	<p class="button-controls">
+		<span class="add-to-menu">
+			<input type="submit"<?php disabled( $nav_menu_selected_id, 0 ); ?> class="button-secondary submit-add-to-menu right" value="<?php esc_attr_e('Add to Menu'); ?>" name="add-qtrans-langsw-menu-item" id="submit-qtrans-langsw" />
+			<span class="spinner"></span>
+		</span>
+	</p>
+</div>
+<?php
+}
+
+function qtrans_add_nav_menu_metabox()
+{
+	add_meta_box( 'add-qtrans-language-switcher', __( 'Language Switcher' ), 'qtrans_nav_menu_metabox', 'nav-menus', 'side', 'default' );
+}
+add_action('admin_head-nav-menus.php', 'qtrans_add_nav_menu_metabox');

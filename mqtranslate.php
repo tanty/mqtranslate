@@ -3,7 +3,7 @@
 Plugin Name: mqTranslate
 Plugin URI: http://wordpress.org/plugins/mqtranslate/
 Description: Adds userfriendly multilingual content support into Wordpress. mqTranslate is a fork of the well-known <a href="http://www.qianqin.de/mqtranslate/">qTranslate</a> plugin by <a href="http://www.qianqin.de/">Qian Qin</a>, extending the original software with collaborative and team-oriented features.
-Version: 2.9.1.2
+Version: 2015.4.0
 Author: xhaleera
 Author URI: http://www.xhaleera.com
 Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
@@ -131,6 +131,8 @@ define('QT_DATE_OVERRIDE',		2);
 define('QT_DATE',				3);
 define('QT_STRFTIME',			4);
 
+$q_config = array();
+
 // enable the use of following languages (order=>language)
 $q_config['enabled_languages'] = array(
 		'0' => 'de',
@@ -164,6 +166,7 @@ $q_config['url_mode'] = QT_URL_PATH;
 $q_config['pre_domain']['de'] = "de";
 $q_config['pre_domain']['en'] = "en";
 $q_config['pre_domain']['zh'] = "zh";
+$q_config['pre_domain']['ru'] = "ru";
 $q_config['pre_domain']['fi'] = "fs";
 $q_config['pre_domain']['fr'] = "fr";
 $q_config['pre_domain']['nl'] = "nl";
@@ -184,6 +187,7 @@ $q_config['pre_domain']['sr'] = 'sr';
 $q_config['language_name']['de'] = "Deutsch";
 $q_config['language_name']['en'] = "English";
 $q_config['language_name']['zh'] = "中文";
+$q_config['language_name']['ru'] = "Русский";
 $q_config['language_name']['fi'] = "suomi";
 $q_config['language_name']['fr'] = "Français";
 $q_config['language_name']['nl'] = "Nederlands";
@@ -205,6 +209,7 @@ $q_config['language_name']['sr'] = 'српски';
 $q_config['locale']['de'] = "de_DE";
 $q_config['locale']['en'] = "en_US";
 $q_config['locale']['zh'] = "zh_CN";
+$q_config['locale']['ru'] = "ru_RU";
 $q_config['locale']['fi'] = "fi";
 $q_config['locale']['fr'] = "fr_FR";
 $q_config['locale']['nl'] = "nl_NL";
@@ -226,6 +231,7 @@ $q_config['locale']['sr'] = 'sr_RS';
 $q_config['not_available']['de'] = "Leider ist der Eintrag nur auf %LANG:, : und % verfügbar.";
 $q_config['not_available']['en'] = "Sorry, this entry is only available in %LANG:, : and %.";
 $q_config['not_available']['zh'] = "对不起，此内容只适用于%LANG:，:和%。";
+$q_config['not_available']['ru'] = "Извините, этот техт доступен только в %LANG:, : и %.";
 $q_config['not_available']['fi'] = "Anteeksi, mutta tämä kirjoitus on saatavana ainoastaan näillä kielillä: %LANG:, : ja %.";
 $q_config['not_available']['fr'] = "Désolé, cet article est seulement disponible en %LANG:, : et %.";
 $q_config['not_available']['nl'] = "Onze verontschuldigingen, dit bericht is alleen beschikbaar in %LANG:, : en %.";
@@ -252,6 +258,7 @@ $q_config['use_strftime'] = QT_STRFTIME;
 $q_config['date_format']['en'] = '%A %B %e%q, %Y';
 $q_config['date_format']['de'] = '%A, der %e. %B %Y';
 $q_config['date_format']['zh'] = '%x %A';
+$q_config['date_format']['ru'] = '%A %B %e%q, %Y';
 $q_config['date_format']['fi'] = '%e.&m.%C';
 $q_config['date_format']['fr'] = '%A %e %B %Y';
 $q_config['date_format']['nl'] = '%d/%m/%y';
@@ -271,6 +278,7 @@ $q_config['date_format']['sr'] = '%A, %d. %m. %Y';
 $q_config['time_format']['en'] = '%I:%M %p';
 $q_config['time_format']['de'] = '%H:%M';
 $q_config['time_format']['zh'] = '%I:%M%p';
+$q_config['time_format']['ru'] = '%H:%M';
 $q_config['time_format']['fi'] = '%H:%M';
 $q_config['time_format']['fr'] = '%H:%M';
 $q_config['time_format']['nl'] = '%H:%M';
@@ -292,6 +300,7 @@ $q_config['time_format']['sr'] = '%H.%M';
 $q_config['flag']['en'] = 'gb.png';
 $q_config['flag']['de'] = 'de.png';
 $q_config['flag']['zh'] = 'cn.png';
+$q_config['flag']['ru'] = 'ru.png';
 $q_config['flag']['fi'] = 'fi.png';
 $q_config['flag']['fr'] = 'fr.png';
 $q_config['flag']['nl'] = 'nl.png';
@@ -500,21 +509,16 @@ $q_config['use_secure_cookie'] = 0;
 // Optimisation settings
 $q_config['filter_all_options'] = 1;
 
-//if (!function_exists('is_plugin_active') || is_plugin_active( 'mqtranslate/mqtranslate.php' )) {
-	// Load mqTranslate
-	require_once(dirname(__FILE__)."/mqtranslate_javascript.php");
-	require_once(dirname(__FILE__)."/mqtranslate_utils.php");
-	require_once(dirname(__FILE__)."/mqtranslate_core.php");
-	require_once(dirname(__FILE__)."/mqtranslate_wphacks.php");
-	require_once(dirname(__FILE__)."/mqtranslate_widget.php");
+// Load mqTranslate
+require_once(dirname(__FILE__)."/mqtranslate_utils.php");
+require_once(dirname(__FILE__)."/mqtranslate_core.php");
+require_once(dirname(__FILE__)."/mqtranslate_widget.php");
+if (is_admin())
 	require_once(dirname(__FILE__)."/mqtranslate_configuration.php");
+else
+	require_once(dirname(__FILE__).'/mqtranslate_frontend.php');
+
+// set hooks at the end
+require_once(dirname(__FILE__)."/mqtranslate_hooks.php");
 	
-	// load qTranslate Services if available
-	if(file_exists(dirname(__FILE__)."/mqtranslate_services.php"))
-		require_once(dirname(__FILE__)."/mqtranslate_services.php");
-	
-	// set hooks at the end
-	require_once(dirname(__FILE__)."/mqtranslate_hooks.php");
-	
-	require_once(dirname(__FILE__)."/mqtranslate_xhaleera_addons.php");
-//}
+require_once(dirname(__FILE__)."/mqtranslate_xhaleera_addons.php");
