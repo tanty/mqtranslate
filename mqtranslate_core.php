@@ -915,6 +915,7 @@ function qtrans_convertURL($url='', $lang='', $forceadmin = false, $showDefaultL
 }
 
 // splits text with language tags into array
+/*
 function qtrans_split($text, $quicktags = true, array &$languageMap = NULL) {
 	global $q_config;
 	
@@ -970,6 +971,48 @@ function qtrans_split($text, $quicktags = true, array &$languageMap = NULL) {
 	foreach ($result as $lang => $lang_content)
 		$result[$lang] = preg_replace("#(<!--more-->|<!--nextpage-->)+$#ismS","",$lang_content);
 	
+	return $result;
+}
+*/
+
+function qtrans_split($text, $quicktags = true) {
+	global $q_config;
+	$split_regex = "#(<!--:[a-z]{2}-->|<!--:-->|\[:[a-z]{2}\])#ism";
+	$result = array();
+	foreach ($q_config['enabled_languages'] as $language)
+		$result[$language] = '';
+	
+	// split text at all language comments and quick tags
+	$blocks = preg_split($split_regex, $text, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
+	if(count($blocks)==1){
+		$block=$blocks[0];
+		//no languages, put it in all languages then
+		foreach($q_config['enabled_languages'] as $language)
+			$result[$language] = $block;
+	}else{
+		$current_language = false;
+		foreach($blocks as $block) {
+			# detect language tags
+			if(preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
+				$current_language = $matches[1];
+				if(!qtrans_isEnabled($current_language)) $current_language = false;
+				continue;
+				// detect quicktags
+			} elseif($quicktags && preg_match("#^\[:([a-z]{2})\]$#ism", $block, $matches)) {
+				$current_language = $matches[1];
+				if(!qtrans_isEnabled($current_language)) $current_language = false;
+				continue;
+				// detect ending tags
+			} elseif(preg_match("#^<!--:-->$#ism", $block, $matches)) {
+				$current_language = false;
+				continue;
+			}
+			// correctly categorize text block
+			if(!$current_language) continue;
+			$result[$current_language] .= $block;
+			$current_language = false;
+		}
+	}
 	return $result;
 }
 

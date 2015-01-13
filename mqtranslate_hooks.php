@@ -79,18 +79,6 @@ function qtrans_excludePages($pages) {
 	return array_merge($exclude, $pages);
 }
 
-function qtrans_links($links, $file){ // copied from Sociable Plugin
-	//Static so we don't call plugin_basename on every plugin row.
-	static $this_plugin;
-	if (!$this_plugin) $this_plugin = plugin_basename(dirname(__FILE__).'/mqtranslate.php');
-	
-	if ($file == $this_plugin){
-		$settings_link = '<a href="options-general.php?page=mqtranslate">' . __('Settings', 'mqtranslate') . '</a>';
-		array_unshift( $links, $settings_link ); // before other links
-	}
-	return $links;
-}
-
 function qtrans_languageColumnHeader($columns){
 	$new_columns = array();
 	if(isset($columns['cb']))			$new_columns['cb'] = '';
@@ -265,7 +253,6 @@ add_filter('comment_notification_headers',	'qtrans_useCurrentLanguageIfNotFoundU
 add_filter('comment_notification_subject',	'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage');
 
 add_filter('bloginfo_url',					'qtrans_convertBlogInfoURL',10,2);
-add_filter('plugin_action_links', 			'qtrans_links', 10, 2);
 add_filter('manage_language_columns',		'qtrans_language_columns');
 add_filter('core_version_check_locale',		'qtrans_versionLocale');
 add_filter('redirect_canonical',			'qtrans_checkCanonical', 10, 2);

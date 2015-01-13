@@ -14,54 +14,44 @@ qtrans_split = function(text)
 		var lang=qTranslateConfig.enabled_languages[i];
 		result[lang] = '';
 	}
-	var split_regex_c = /<!--:-->/gi;
-	var blocks = text.xsplit(split_regex_c);
-	//c('qtrans_split: blocks='+blocks);
-	//c('qtrans_split: blocks.length='+blocks.length);
+	var split_regex = /(<!--:[a-z]{2}-->|<!--:-->|\[:[a-z]{2}\])/gi;
+	var blocks = text.xsplit(split_regex);
 	if(!qtrans_isArray(blocks))
 		return result;
-	var matches, lang_regex, lang;
-	if(blocks.length>1){//there are matches
-		lang_regex = /<!--:([a-z]{2})-->/gi;
-		for(var i = 0;i<blocks.length;++i){
-			lang_regex.lastIndex=0;
-			var b=blocks[i];
-			//c('blocks['+i+']='+b);
-			if(!b.length) continue;
-			matches = lang_regex.exec(b);
-			//c('matches='+matches);
-			if(matches==null) continue;
+	if(blocks.length==1){//no language separator found, enter it to all languages
+		var b=blocks[0];
+		for(var j=0; j<qTranslateConfig.enabled_languages.length; ++j){
+			var lang=qTranslateConfig.enabled_languages[j];
+			result[lang] += b;
+		}
+		return result;
+	}
+	var clang_regex=/<!--:([a-z]{2})-->/gi;
+	var c_end_regex=/<!--:-->/g;
+	var blang_regex=/\[:([a-z]{2})\]/gi;
+	lang = false;
+	for(var i = 0;i<blocks.length;++i){
+		var b=blocks[i];
+		//c('blocks['+i+']='+b);
+		if(!b.length) continue;
+		matches = clang_regex.exec(b); clang_regex.lastIndex=0;
+		if(matches!=null){
 			lang = matches[1];
-			result[lang] += b.substring(lang_regex.lastIndex);
-			//c('text='+result[lang]);
+			continue;
 		}
-	}else{
-		var split_regex_b = /(\[:[a-z]{2}\])/gi;
-		blocks = text.xsplit(split_regex_b);
-		if(!qtrans_isArray(blocks))
-			return result;
-		if(blocks.length==1){//no language separator found, enter it to all languages
-			var b=blocks[0];
-			for(var j=0; j<qTranslateConfig.enabled_languages.length; ++j){
-				var lang=qTranslateConfig.enabled_languages[j];
-				result[lang] += b;
-			}
-		}else{
-			lang_regex = /\[:([a-z]{2})\]/gi;
+		matches = c_end_regex.exec(b); c_end_regex.lastIndex=0;
+		if(matches!=null){
 			lang = false;
-			for(var i = 0;i<blocks.length;++i){
-				var b=blocks[i];
-				//c('blocks['+i+']='+b+'; lang='+lang);
-				if(lang){
-					result[lang] += b;
-					lang = false;
-				}else{
-					matches = lang_regex.exec(b); lang_regex.lastIndex=0;
-					if(matches==null) continue;
-					lang = matches[1];
-				}
-			}
+			continue;
 		}
+		matches = blang_regex.exec(b); blang_regex.lastIndex=0;
+		if(matches!=null){
+			lang = matches[1];
+			continue;
+		}
+		if(!lang) continue;
+		result[lang] += b;
+		lang = false;
 	}
 	return result;
 }
@@ -122,10 +112,36 @@ qtrans_split = function(text)
 	return result;
 }
 */
+
+qtrans_allthesame = function(texts)
+{
+	if(qTranslateConfig.enabled_languages.length==0) return '';
+	var text = '';
+	//take first not empty
+	for(var i=0; i<qTranslateConfig.enabled_languages.length; ++i)
+	{
+		var lang=qTranslateConfig.enabled_languages[i];
+		var t = texts[lang];
+		if ( !t || t=='' ) continue;
+		text = t;
+		break;
+	}
+	for(var i=0; i<qTranslateConfig.enabled_languages.length; ++i)
+	{
+		var lang=qTranslateConfig.enabled_languages[i];
+		var t = texts[lang];
+		if ( !t || t=='' ) continue;
+		if(t!=text) return null;
+	}
+	return text;
+}
+
 //"_c" stands for "comment"
 qtrans_join_c = function(texts)
 {
-	var text = '';
+	var text = qtrans_allthesame(texts);
+	if (text != null) return text;
+	text = '';
 	for(var i=0; i<qTranslateConfig.enabled_languages.length; ++i)
 	{
 		var lang=qTranslateConfig.enabled_languages[i];
@@ -141,7 +157,9 @@ qtrans_join_c = function(texts)
 //"b" stands for "bracket"
 qtrans_join_b = function(texts)
 {
-	var text = '';
+	var text = qtrans_allthesame(texts);
+	if (text != null) return text;
+	text = '';
 	for(var i=0; i<qTranslateConfig.enabled_languages.length; ++i)
 	{
 		var lang=qTranslateConfig.enabled_languages[i];

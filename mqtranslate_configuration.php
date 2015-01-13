@@ -66,7 +66,7 @@ function qtrans_add_admin_js ()
 {
 	global $q_config;
 	
-	wp_enqueue_script( 'qtranslate-script', plugins_url( '/mqtranslate.js', __FILE__ ) );
+	wp_enqueue_script( 'qtranslate-script', plugins_url( '/mqtranslate.js', __FILE__ ), array(), QT_VERSION );
 	
 	wp_dequeue_script( 'autosave' );
 	wp_deregister_script( 'autosave' ); //autosave script saves the active language only and messes it up later in a hard way
@@ -966,6 +966,19 @@ function qtrans_add_language_menu( $wp_admin_bar )
 		);
 	}
 }
+
+function qtrans_links($links, $file){ // copied from Sociable Plugin
+	//Static so we don't call plugin_basename on every plugin row.
+	static $this_plugin;
+	if (!$this_plugin) $this_plugin = plugin_basename(dirname(__FILE__).'/mqtranslate.php');
+
+	if ($file == $this_plugin){
+		$settings_link = '<a href="options-general.php?page=mqtranslate">' . __('Settings', 'mqtranslate') . '</a>';
+		array_unshift( $links, $settings_link ); // before other links
+	}
+	return $links;
+}
+add_filter('plugin_action_links', 'qtrans_links', 10, 2);
 
 add_filter('get_term', 'qtrans_useAdminTermLib',0);
 add_filter('get_terms', 'qtrans_useAdminTermLib',0);
