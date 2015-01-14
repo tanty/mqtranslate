@@ -984,33 +984,31 @@ function qtrans_split($text, $quicktags = true) {
 	
 	// split text at all language comments and quick tags
 	$blocks = preg_split($split_regex, $text, -1, PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE);
-	if(count($blocks)==1){
-		$block=$blocks[0];
-		//no languages, put it in all languages then
-		foreach($q_config['enabled_languages'] as $language)
-			$result[$language] = $block;
-	}else{
-		$current_language = false;
-		foreach($blocks as $block) {
-			# detect language tags
-			if(preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
-				$current_language = $matches[1];
-				if(!qtrans_isEnabled($current_language)) $current_language = false;
-				continue;
-				// detect quicktags
-			} elseif($quicktags && preg_match("#^\[:([a-z]{2})\]$#ism", $block, $matches)) {
-				$current_language = $matches[1];
-				if(!qtrans_isEnabled($current_language)) $current_language = false;
-				continue;
-				// detect ending tags
-			} elseif(preg_match("#^<!--:-->$#ism", $block, $matches)) {
-				$current_language = false;
-				continue;
-			}
-			// correctly categorize text block
-			if(!$current_language) continue;
+	$current_language = false;
+	foreach($blocks as $block) {
+		# detect language tags
+		if(preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
+			$current_language = $matches[1];
+			if(!qtrans_isEnabled($current_language)) $current_language = false;
+			continue;
+		// detect quicktags
+		} elseif($quicktags && preg_match("#^\[:([a-z]{2})\]$#ism", $block, $matches)) {
+			$current_language = $matches[1];
+			if(!qtrans_isEnabled($current_language)) $current_language = false;
+			continue;
+		// detect ending tags
+		} elseif(preg_match("#^<!--:-->$#ism", $block, $matches)) {
+			$current_language = false;
+			continue;
+		}
+		// correctly categorize text block
+		if($current_language){
 			$result[$current_language] .= $block;
 			$current_language = false;
+		}else{
+			foreach($q_config['enabled_languages'] as $language) {
+				$result[$language] .= $block;
+			}
 		}
 	}
 	return $result;
