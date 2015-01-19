@@ -32,10 +32,8 @@ function qtrans_head(){
 	qtrans_add_lang_icons_css();
 
 	// set links to translations of current page
-	foreach ($q_config['enabled_languages'] as $language) {
-		if($language != qtrans_getLanguage())
-			echo '<link hreflang="'.$language.'" href="'.qtrans_convertURL('',$language).'" rel="alternate" />'."\n";
-	}
+	foreach ($q_config['enabled_languages'] as $language)
+		echo '<link hreflang="'.$language.'" href="'.qtrans_convertURL('',$language).'" rel="alternate" />'."\n";
 }
 add_action('wp_head', 'qtrans_head');
 
