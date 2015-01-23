@@ -21,24 +21,16 @@ if ( !defined( 'ABSPATH' ) ) exit;
 
 /* mqTranslate Core Functions */
 
-function qtrans_init() {
+function qtrans_init_language() {
 	global $q_config;
 	// check if it isn't already initialized
 	if(defined('QTRANS_INIT')) return;
 	define('QTRANS_INIT',true);
 	
-	do_action('qtrans_init_begin');
-	
 	qtrans_loadConfig();
 		
-	// update Gettext Databases if on Backend
-	if (defined('WP_ADMIN')) {
-		if ($q_config['auto_update_mo']) qtrans_updateGettextDatabases();
-		if (current_user_can('manage_categories')) qtrans_updateTermLibrary();
-		$q_config['cookie_enabled'] = isset($_COOKIE[QT_COOKIE_NAME_ADMIN]);
-	}
-	else
-		$q_config['cookie_enabled'] = isset($_COOKIE[QT_COOKIE_NAME_FRONT]);
+	$cookie_name = defined('WP_ADMIN') ? QT_COOKIE_NAME_ADMIN : QT_COOKIE_NAME_FRONT;
+	$q_config['cookie_enabled']=isset($_COOKIE[$cookie_name]);
 	
 	$q_config['url_info'] = qtrans_detect_language($_SERVER['REQUEST_URI'], $_SERVER['HTTP_HOST'], isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
 	$q_config['language'] = apply_filters('qtranslate_language', $q_config['url_info']['language']);
@@ -55,13 +47,32 @@ function qtrans_init() {
 	if ($q_config['disable_header_css'])
 		add_filter('qtranslate_header_css', create_function('$a', "return '';"));
 	
-	// load plugin translations
-	load_plugin_textdomain('mqtranslate', false, dirname(plugin_basename( __FILE__ )).'/lang');
-	
 	// fix url to prevent xss
 	$q_config['url_info']['url'] = qtrans_convertURL(add_query_arg('lang',$q_config['default_language'],$q_config['url_info']['url']));
 	
 	//allow other plugins to initialize whatever they need
+	do_action('qtrans_init_language');
+}
+
+function qtrans_init() {
+	global $q_config;
+
+	do_action('qtrans_init_begin');
+
+	if(defined('WP_ADMIN')){
+		// update Gettext Databases if on Backend
+		if($q_config['auto_update_mo']) qtrans_updateGettextDatabases();
+		// update definitions if neccesary
+		if(current_user_can('manage_categories')) qtrans_updateTermLibrary();
+	}
+
+	// load plugin translations
+	load_plugin_textdomain('mqtranslate', false, dirname(plugin_basename( __FILE__ )).'/lang');
+
+	foreach ($q_config['text_field_filters'] as $nm)
+		add_filter($nm, 'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage',0);
+
+	//allow other plugins to initialize whatever they need for qTranslate
 	do_action('qtrans_init');
 }
 
@@ -428,9 +439,6 @@ function qtrans_loadConfig() {
 	$q_config['use_secure_cookie'] = $use_secure_cookie;
 	$q_config['filter_all_options'] = $filter_all_options;
 	
-	foreach ($q_config['text_field_filters'] as $nm)
-		add_filter($nm, 'qtrans_useCurrentLanguageIfNotFoundUseDefaultLanguage', 0);
-	
 	do_action('qtranslate_loadConfig');
 }
 
@@ -782,7 +790,7 @@ function qtrans_ignored_file_type($path) {
 }
 
 function qtrans_language_nutral_path($path) {
-	if(preg_match("#^(wp-login.php|wp-signup.php|wp-register.php|wp-cron.php|wp-admin/)#", $path)) return true;
+	if(preg_match("#^(wp-comments-post.php|wp-login.php|wp-signup.php|wp-register.php|wp-cron.php|wp-admin/)#", $path)) return true;
 	if(qtrans_ignored_file_type($path)) return true;
 	return false;
 }

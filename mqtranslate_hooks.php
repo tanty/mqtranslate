@@ -180,8 +180,9 @@ function qtrans_gettext_with_context($translated_text) {
 }
 
 // Hooks (Actions)
+add_action('plugins_loaded', 				'qtrans_init_language', 2);//user is not authenticated yet
+add_action('init', 							'qtrans_init');//user is authenticated
 add_action('widgets_init',					'qtrans_widget_init'); 
-add_action('plugins_loaded',				'qtrans_init', 2);
 
 // Hooks (execution time critical filters) 
 add_filter('gettext',						'qtrans_gettext',0);

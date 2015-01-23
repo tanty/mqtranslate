@@ -251,7 +251,7 @@ var qTranslate=function()
 		var h=contentHooks[inpField.id]={};
 		h.contentField=inpField;
 		h.contents=qtrans_split(inpField.value);
-		h.mlContentField=qtrans_ce(inpField.tagName, {name: inpField.name, className: 'hidden', value: inpField.value}, form, true);
+		h.mlContentField=qtrans_ce('input', {name: inpField.name, className: 'hidden', value: inpField.value}, form, true);
 		if(!separator){
 			if(inpField.tagName==='TEXTAREA')
 				separator='<';

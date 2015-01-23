@@ -17,12 +17,12 @@
 	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if ( !defined('ABSPATH') ) exit;
+if ( !defined('WP_ADMIN') ) exit;
 
 require_once(dirname(__FILE__)."/admin/import_export.php");
 require_once(dirname(__FILE__)."/admin/activation_hook.php");
 
-function qtrans_update_config()
+function qtrans_reset_config()
 {
 	//if(!defined('WP_ADMIN')) return;
 	if(!current_user_can('manage_options')) return;
@@ -58,8 +58,9 @@ function qtrans_update_config()
 			delete_option('mqtranslate_widget_css');
 		}
 	}
+	qtrans_loadConfig();
 }
-add_action('qtrans_init_begin','qtrans_update_config',10);
+add_action('qtrans_init_begin','qtrans_reset_config',10);
 
 function qtrans_add_admin_js ()
 {
@@ -921,7 +922,7 @@ function qtrans_nav_menu_metabox( $object )
 	<span class="list-controls hide-if-no-js">
 		<a href="javascript:void(0);" class="help" onclick="jQuery( '#help-login-links' ).toggle();"><?php _e( 'Help' ); ?></a>
 		<span class="hide-if-js" id="help-login-links"><br /><a name="help-login-links"></a>
-		Menu item added is replaced with a sub-menu of available languages when menu is rendered. Depending on how your theme renders menu you may need to override and customize css entries .qtrans-lang-menu and .qtrans-lang-menu-item, originally defined in qtranslate.css.
+		Menu item added is replaced with a sub-menu of available languages when menu is rendered. Depending on how your theme renders menu you may need to override and customize css entries .qtrans-lang-menu and .qtrans-lang-menu-item, originally defined in qtranslate.css. The field "URL" of inserted menu item allows additional configuration described in <a href="https://wordpress.org/plugins/mqtranslate/faq" target="blank">FAQ</a>.
 		</span>
 	</span>
 	<p class="button-controls">
