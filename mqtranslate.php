@@ -501,7 +501,7 @@ $q_config['windows_locale']['zh'] = "Chinese";
 $q_config['windows_locale']['zu'] = "Zulu";
 
 // User-level language protection
-$q_config['ul_lang_protection'] = 1;
+$q_config['ul_lang_protection'] = 0;
 
 // Custom post types modification
 $q_config['allowed_custom_post_types'] = array();

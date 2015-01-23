@@ -679,8 +679,6 @@ var qTranslate=function()
 
 	var langSwitchWrap=qtrans_ce('ul', {className: 'qtrans-lang-switch-wrap wp-ui-primary'});
 	{
-		//var header=w.getElementsByTagName('h2')[0];
-		//header.parentNode.insertBefore(langSwitchWrap, header.nextElementSibling);
 		var w=document.getElementsByClassName('wrap')[0];
 		var f=w.getElementsByTagName('form')[0];
 		f.parentNode.insertBefore(langSwitchWrap, f);
@@ -693,6 +691,8 @@ var qTranslate=function()
 function LanguageSwitch(target,initial_language)
 {
 	var langs=qTranslateConfig.enabled_languages, langNames=qTranslateConfig.language_name, activeLanguage=initial_language;
+	var editableLangs = qTranslateConfig.editable_languages || langs;
+	var visibleLangs = qTranslateConfig.visible_languages || new Array();
 	var tabSwitches={};
 	var onTabSwitch=[];
 	function switchTab()
@@ -717,12 +717,21 @@ function LanguageSwitch(target,initial_language)
 	location.pathname.indexOf();
 	for(var i=0; i<langs.length; ++i)
 	{
+		var lang=langs[i];
+		
+		var langName = langNames[lang];
+		var editableIndex = editableLangs.indexOf(lang);
+		if (editableIndex < 0) {
+			if (visibleLangs.indexOf(lang) < 0)
+				continue;
+			langName += ' (Read Only)';
+		}
+		
 		//var flags_location=qTranslateConfig.WP_CONTENT_URL+qTranslateConfig.flag_location;
 		var flag_location=qTranslateConfig.flag_location;
-		var lang=langs[i];
 		var tabSwitch=qtrans_ce ('li', {lang: lang, className: 'qtrans-lang-switch', onclick: switchTab }, target );
 		qtrans_ce('img', {src: flag_location+qTranslateConfig.flag[lang]}, tabSwitch);
-		qtrans_ce('span', {innerHTML: langNames[lang]}, tabSwitch);
+		qtrans_ce('span', {innerHTML: langName}, tabSwitch);
 		tabSwitches[lang]=tabSwitch;
 		if ( activeLanguage == lang )
 			tabSwitch.classList.add('wp-ui-highlight');

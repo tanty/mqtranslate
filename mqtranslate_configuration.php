@@ -84,6 +84,8 @@ function qtrans_add_admin_js ()
 			$config['language_name'][$lang]=$q_config['language_name'][$lang];
 		}
 	}
+	
+	$config = apply_filters('pre_qtranslate_js', $config);
 ?>
 	<script type="text/javascript">
 	/* <![CDATA[ */

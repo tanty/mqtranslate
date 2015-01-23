@@ -982,7 +982,7 @@ function qtrans_split($text, $quicktags = true, array &$languageMap = NULL) {
 }
 */
 
-function qtrans_split($text, $quicktags = true) {
+function qtrans_split($text, $quicktags = true, array &$languageMap = NULL) {
 	global $q_config;
 	$split_regex = "#(<!--:[a-z]{2}-->|<!--:-->|\[:[a-z]{2}\])#ism";
 	$result = array();
@@ -994,28 +994,40 @@ function qtrans_split($text, $quicktags = true) {
 	$current_language = false;
 	foreach($blocks as $block) {
 		# detect language tags
-		if(preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
-			$current_language = $matches[1];
-			if(!qtrans_isEnabled($current_language)) $current_language = false;
+		if (preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
+			if (qtrans_isEnabled($matches[1])) {
+				$current_language = $matches[1];
+				if ($languageMap !== NULL)
+					$languageMap[$current_language] = false;
+			}
+			else
+				$current_language = false;
 			continue;
 		// detect quicktags
 		} elseif($quicktags && preg_match("#^\[:([a-z]{2})\]$#ism", $block, $matches)) {
-			$current_language = $matches[1];
-			if(!qtrans_isEnabled($current_language)) $current_language = false;
+			if (qtrans_isEnabled($matches[1])) {
+				$current_language = $matches[1];
+				if ($languageMap !== NULL)
+					$languageMap[$current_language] = true;
+			}
+			else
+				$current_language = false;
 			continue;
 		// detect ending tags
-		} elseif(preg_match("#^<!--:-->$#ism", $block, $matches)) {
+		}
+		elseif (preg_match("#^<!--:-->$#ism", $block, $matches)) {
 			$current_language = false;
 			continue;
 		}
+		
 		// correctly categorize text block
-		if($current_language){
+		if ($current_language) {
 			$result[$current_language] .= $block;
 			$current_language = false;
-		}else{
-			foreach($q_config['enabled_languages'] as $language) {
+		}
+		else {
+			foreach ($q_config['enabled_languages'] as $language)
 				$result[$language] .= $block;
-			}
 		}
 	}
 	return $result;

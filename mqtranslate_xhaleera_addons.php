@@ -160,47 +160,40 @@ function mqtrans_postUpdated($post_ID, $after, $before) {
 	if (!in_array($after->post_type, array( 'post', 'page' )) && !in_array($after->post_type, $q_config['allowed_custom_post_types']))
 		return;
 	
-	$titleMap = array();
-	$contentMap = array();
+	$fields = array('title', 'content', 'excerpt');
+	
+	$containers = array();
+	$maps = array();
 	
 	$cu = wp_get_current_user();
 	if ($cu->has_cap('edit_users') || empty($q_config['ul_lang_protection']))
 	{
-		$title = qtrans_split($after->post_title, true, $titleMap);
-		foreach ($title as $k => $v) {
-			if (qtrans_isEmptyContent($v))
-				unset($title[$k]);
-		}
-		$content = qtrans_split($after->post_content, true, $contentMap);
-		foreach ($content as $k => $v) {
-			if (qtrans_isEmptyContent($v))
-				unset($content[$k]);
+		foreach ($fields as $f) {
+			$containers[$f] = qtrans_split($after->{"post_{$f}"}, true, $maps[$f]);
+			foreach ($containers[$f] as $k => $v) {
+				if (qtrans_isEmptyContent($v))
+					unset($containers[$f]);
+			}
 		}
 	}
 	else
 	{
-		$titleBeforeMap = array();
-		$titleBefore = qtrans_split($before->post_title, true, $titleBeforeMap);
-		$titleAfter = qtrans_split($after->post_title, true, $titleMap);
-		foreach ($titleAfter as $k => $v) {
-			if (!mqtrans_currentUserCanEdit($k))
-				unset($titleAfter[$k], $titleMap[$k]);
+		foreach ($fields as $f) {
+			$beforeMap = array();
+			$before = qtrans_split($before->{"post_{$f}"}, true, $beforeMap);
+			$after = qtrans_split($after->{"post_{$f}"}, true, $maps[$f]);
+			foreach ($after as $k => $v) {
+				if (!mqtrans_currentUserCanEdit($k))
+					unset($after[$k], $maps[$f][$k]);
+			}
+			$containers[$f] = array_merge($before, $after);
+			$maps[$f] = array_merge($beforeMap, $maps[$f]);
 		}
-		$title = array_merge($titleBefore, $titleAfter);
-		$titleMap = array_merge($titleBeforeMap, $titleMap);
-
-		$contentBeforeMap = array();
-		$contentBefore = qtrans_split($before->post_content, true, $contentBeforeMap);
-		$contentAfter = qtrans_split($after->post_content, true, $contentMap);
-		foreach ($contentAfter as $k => $v) {
-			if (qtrans_isEmptyContent($v) || !mqtrans_currentUserCanEdit($k))
-				unset($contentAfter[$k], $contentMap[$k]);
-		}
-		$content = array_merge($contentBefore, $contentAfter);
-		$contentMap = array_merge($contentBeforeMap, $contentMap);
 	}
 	
-	$data = array('post_title' => qtrans_join($title, $titleMap), 'post_content' => qtrans_join($content, $contentMap));
+	$data = array();
+	foreach ($fields as $f)
+		$data["post_{$f}"] = qtrans_join($containers[$f], $maps[$f]);
 	if (get_magic_quotes_gpc())
 		$data = stripslashes_deep($data);
 	$where = array('ID' => $post_ID);
@@ -246,7 +239,7 @@ function mqtrans_team_options() {
 				<td>
 					<label for="ul_lang_protection"><input type="checkbox" name="ul_lang_protection" id="ul_lang_protection" value="1"<?php echo ($q_config['ul_lang_protection'])?' checked="checked"':''; ?>/> <?php _e('Enable user-level language protection', 'mqtranslate'); ?></label>
 					<br />
-					<small><?php _e('When enabled, this option allows you to select which language is editable on a user-level account basis.', 'mqtranslate') ?></small>
+					<small><?php _e('When enabled, this option allows you to select which language is editable on a user-level account basis. NOTE: Only post title, content and excerpt are supported at this time.', 'mqtranslate') ?></small>
 				</td>
 			</tr>
 	</table>
@@ -267,8 +260,28 @@ function mqtrans_save_team_options() {
 	qtrans_updateSetting('ul_lang_protection', QT_BOOLEAN);
 }
 
+function mqtrans_preConfigJS($config) {
+	global $q_config;
+	
+	if (empty($q_config['ul_lang_protection']) || current_user_can('edit_users'))
+		return $config;
+	
+	$config['editable_languages'] = array();
+	$config['visible_languages'] = array();
+	foreach ($config['enabled_languages'] as $lang) {
+		if (mqtrans_currentUserCanEdit($lang))
+			$config['editable_languages'][] = $lang;
+		else if (mqtrans_currentUserCanView($lang))
+			$config['visible_languages'][] = $lang;
+	}
+	
+	return $config;
+}
+
 if (!defined('WP_ADMIN'))
 	add_filter('get_post_metadata', 'mqtrans_filterPostMetaData', 10, 4);
+
+add_filter('pre_qtranslate_js',				'mqtrans_preConfigJS');
 
 add_action('edit_user_profile', 			'mqtrans_userProfile');
 add_action('show_user_profile',				'mqtrans_userProfile');
