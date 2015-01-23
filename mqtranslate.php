@@ -6,7 +6,7 @@ Description: Adds userfriendly multilingual content support into Wordpress. mqTr
 Version: 2015.4.0-alpha1
 Author: xhaleera
 Author URI: http://www.xhaleera.com
-Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
+Tags: multilingual, multi, language, admin, tinymce, qtranslate, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
 */
 /*
 	Flags in flags directory are made by Luc Balemans and downloaded from

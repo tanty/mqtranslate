@@ -1,6 +1,6 @@
 === mqTranslate ===
 Contributors: chsxf, michel.weimerskirch
-Tags: multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
+Tags: qtranslate, multilingual, language, admin, tinymce, bilingual, widget, switcher, i18n, l10n, multilanguage, professional, translation, service, human
 Requires at least: 3.9
 Tested up to: 4.1
 Stable tag: 2.9.1.2
