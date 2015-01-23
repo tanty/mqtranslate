@@ -116,16 +116,23 @@ function qtrans_get_language_cookie()
 
 function qtrans_set_language_cookie($lang, $cookie_path)
 {
+	global $q_config;
+	
 	if (defined('WP_ADMIN')) {
 		$cookie_name = QT_COOKIE_NAME_ADMIN;
 		$cookie_path = trailingslashit($cookie_path).'wp-admin';
+		$cookie_secure = false;
 	}
 	else {
+		if (!empty($q_config['disable_client_cookies']))
+			return;
+		
 		$cookie_name = QT_COOKIE_NAME_FRONT;
 		if (strlen($cookie_path) > 1)
 			$cookie_path = untrailingslashit($cookie_path);
+		$cookie_secure = !empty($q_config['use_secure_cookie']);
 	}
-	setcookie(QT_COOKIE_NAME, $lang, time()+86400*365, $cookie_path);
+	setcookie($cookie_name, $lang, time()+86400*365, $cookie_path, NULL, $cookie_secure);
 }
 
 // returns cleaned string and language information
