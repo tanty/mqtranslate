@@ -3,10 +3,10 @@
 Plugin Name: mqTranslate
 Plugin URI: http://wordpress.org/plugins/mqtranslate/
 Description: Adds userfriendly multilingual content support into Wordpress. mqTranslate is a fork of the well-known <a href="http://www.qianqin.de/mqtranslate/">qTranslate</a> plugin by <a href="http://www.qianqin.de/">Qian Qin</a>, extending the original software with collaborative and team-oriented features.
-Version: 2015.4.0-alpha1
+Version: 2015.4.0
 Author: xhaleera
 Author URI: http://www.xhaleera.com
-Tags: multilingual, multi, language, admin, tinymce, qtranslate, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
+Tags: multilingual, multi, language, admin, tinymce, mqTranslate, Polyglot, bilingual, widget, switcher, professional, human, translation, service
 */
 /*
 	Flags in flags directory are made by Luc Balemans and downloaded from
@@ -88,21 +88,31 @@ Tags: multilingual, multi, language, admin, tinymce, qtranslate, mqTranslate, Po
 	All Supporters! Thanks for all the donations!
 */
 
-if ( ! function_exists( 'add_filter' ) ) {
-	header( 'Status: 403 Forbidden' );
-	header( 'HTTP/1.1 403 Forbidden' );
-	exit();
+function mqtranslate_activation_check() {
+	$plugins = array(
+			'qTranslate' => 'qtranslate/qtranslate.php',
+			'zTranslate' => 'ztranslate/ztranslate.php',
+			'qTranslate-X' => 'qtranslate-x/qtranslate.php',
+			'qTranslate Plus' => 'qtranslate-xp/ppqtranslate.php'
+	);
+	
+	$msg = __("Sorry, but mqTranslate can not be activated. You have to deactivate %s first.", 'mqtranslate');
+	
+	foreach ($plugins as $k => $v) {
+		if ( is_plugin_active( $v ) ) {
+			deactivate_plugins(__FILE__); // Deactivate ourself
+			wp_die( sprintf($msg, $k) );
+		}
+	}
 }
+register_activation_hook(__FILE__, 'mqtranslate_activation_check');
 
-if ( ! defined( 'QTRANSLATE_FILE' ) ) {
-	define( 'QTRANSLATE_FILE', __FILE__ );
-}
+if (function_exists('qtrans_init'))
+	return;
 
 /* DEFAULT CONFIGURATION PART BEGINS HERE */
 
 /* There is no need to edit anything here! */
-
-define('QT_VERSION', '2015.4.0-alpha1');
 
 // mqTranslate Editor will only activated for the given version of Wordpress.
 // Can be changed to use with other versions but might cause problems and/or data loss!
@@ -113,21 +123,13 @@ define('QT_BOOLEAN',	2);
 define('QT_INTEGER',	3);
 define('QT_URL',		4);
 define('QT_LANGUAGE',	5);
-define('QT_ARRAY',		6);
-
 define('QT_URL_QUERY',	1);
 define('QT_URL_PATH',	2);
 define('QT_URL_DOMAIN',	3);
-
 define('QT_STRFTIME_OVERRIDE',	1);
 define('QT_DATE_OVERRIDE',		2);
 define('QT_DATE',				3);
 define('QT_STRFTIME',			4);
-
-define('QT_COOKIE_NAME_FRONT','wp_qtrans_front_language');
-define('QT_COOKIE_NAME_ADMIN','wp_qtrans_admin_language');
-
-define('QT_IGNORE_FILE_TYPES','gif,jpg,jpeg,png,pdf,swf,tif,rar,zip,7z,mpg,divx,mpeg,avi,css,js');
 
 $q_config = array();
 
@@ -140,7 +142,6 @@ $q_config['enabled_languages'] = array(
 
 // sets default language
 $q_config['default_language'] = 'en';
-$q_config['language'] = $q_config['default_language'];
 
 // enables browser language detection
 $q_config['detect_browser_language'] = true;
@@ -154,10 +155,6 @@ $q_config['auto_update_mo'] = true;
 
 // hide language tag for default language
 $q_config['hide_default_language'] = true;
-
-$q_config['custom_fields'] = array();
-$q_config['custom_field_classes'] = array();
-$q_config['text_field_filters'] = array();
 
 // sets default url mode 
 // QT_URL_QUERY - query (questionmark)
@@ -185,7 +182,6 @@ $q_config['pre_domain']['pt'] = "pt";
 $q_config['pre_domain']['pl'] = "pl";
 $q_config['pre_domain']['gl'] = "gl";
 $q_config['pre_domain']['sr'] = 'sr';
-$q_config['pre_domain']['tr'] = 'tr';
 
 // Names for languages in the corresponding language, add more if needed
 $q_config['language_name']['de'] = "Deutsch";
@@ -207,7 +203,6 @@ $q_config['language_name']['pt'] = "Português";
 $q_config['language_name']['pl'] = "Polski";
 $q_config['language_name']['gl'] = "galego";
 $q_config['language_name']['sr'] = 'српски';
-$q_config['language_name']['tr'] = "Turkish";
 
 // Locales for languages
 // see locale -a for available locales
@@ -230,7 +225,6 @@ $q_config['locale']['pt'] = "pt_BR";
 $q_config['locale']['pl'] = "pl_PL";
 $q_config['locale']['gl'] = "gl_ES";
 $q_config['locale']['sr'] = 'sr_RS';
-$q_config['locale']['tr'] = "tr_TR";
 
 // Language not available messages
 // %LANG:<normal_seperator>:<last_seperator>% generates a list of languages seperated by <normal_seperator> except for the last one, where <last_seperator> will be used instead.
@@ -253,7 +247,9 @@ $q_config['not_available']['pt'] = "Desculpe-nos, mas este texto esta apenas dis
 $q_config['not_available']['pl'] = "Przepraszamy, ten wpis jest dostępny tylko w języku %LANG:, : i %.";
 $q_config['not_available']['gl'] = "Sentímolo moito, ista entrada atopase unicamente en %LANG;,: e %.";
 $q_config['not_available']['sr'] = "Zao nam je, ovaj ulaz je jedino moguc u %LANG:, : and %.";
-$q_config['not_available']['tr'] = "Sorry, this entry is only available in %LANG:, : and %.";
+
+// qTranslate Services
+$q_config['mqtranslate_services'] = false;
 
 // strftime usage (backward compability)
 $q_config['use_strftime'] = QT_STRFTIME;
@@ -278,7 +274,6 @@ $q_config['date_format']['pt'] = '%d de %B de %Y';
 $q_config['date_format']['pl'] = '%d/%m/%y';
 $q_config['date_format']['gl'] = '%d de %B de %Y';
 $q_config['date_format']['sr'] = '%A, %d. %m. %Y';
-$q_config['date_format']['tr'] = '%A %B %e%q, %Y';
 
 $q_config['time_format']['en'] = '%I:%M %p';
 $q_config['time_format']['de'] = '%H:%M';
@@ -299,7 +294,6 @@ $q_config['time_format']['pt'] = '%H:%M hrs.';
 $q_config['time_format']['pl'] = '%H:%M';
 $q_config['time_format']['gl'] = '%H:%M hrs.';
 $q_config['time_format']['sr'] = '%H.%M';
-$q_config['time_format']['tr'] = '%H:%M';
 
 // Flag images configuration
 // Look in /flags/ directory for a huge list of flags for usage
@@ -322,7 +316,6 @@ $q_config['flag']['pt'] = 'br.png';
 $q_config['flag']['gl'] = 'galego.png';
 $q_config['flag']['pl'] = 'pl.png';
 $q_config['flag']['sr'] = 'rs.png';
-$q_config['flag']['tr'] = 'tr.png';
 
 // Location of flags (needs trailing slash!)
 $q_config['flag_location'] = 'plugins/mqtranslate/flags/';
@@ -501,7 +494,7 @@ $q_config['windows_locale']['zh'] = "Chinese";
 $q_config['windows_locale']['zu'] = "Zulu";
 
 // User-level language protection
-$q_config['ul_lang_protection'] = 0;
+$q_config['ul_lang_protection'] = 1;
 
 // Custom post types modification
 $q_config['allowed_custom_post_types'] = array();
@@ -515,8 +508,6 @@ $q_config['use_secure_cookie'] = 0;
 
 // Optimisation settings
 $q_config['filter_all_options'] = 1;
-
-register_activation_hook(__FILE__, 'qtrans_activation_hook');
 
 // Load mqTranslate
 require_once(dirname(__FILE__)."/mqtranslate_utils.php");

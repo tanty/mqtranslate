@@ -31,13 +31,12 @@ function qtrans_generateLanguageSelectCode($style='', $id='') {
 		if(is_404()) $url = get_option('home'); else $url = '';
 		if($id=='') $id = 'mqtranslate';
 		$id .= '-chooser';
-		$flag_location=trailingslashit(WP_CONTENT_URL).$q_config['flag_location'];
 		switch($style) {
 			case 'image':
 			case 'text':
 			case 'dropdown':
-				echo PHP_EOL.'<ul class="qtrans_language_chooser" id="'.$id.'">'.PHP_EOL;
-				foreach (qtrans_getSortedLanguages() as $language) {
+				echo '<ul class="qtrans_language_chooser" id="'.$id.'">';
+				foreach(qtrans_getSortedLanguages() as $language) {
 					$classes = array('lang-'.$language);
 					if($language == $q_config['language'])
 						$classes[] = 'active';
@@ -49,7 +48,7 @@ function qtrans_generateLanguageSelectCode($style='', $id='') {
 					echo '><span';
 					if($style=='image')
 						echo ' style="display:none"';
-					echo '>'.$q_config['language_name'][$language].'</span></a></li>'.PHP_EOL;
+					echo '>'.$q_config['language_name'][$language].'</span></a></li>';
 				}
 				echo "</ul><div class=\"qtrans_widget_end\"></div>";
 				if($style=='dropdown') {
@@ -57,7 +56,7 @@ function qtrans_generateLanguageSelectCode($style='', $id='') {
 					echo "var lc = document.getElementById('".$id."');\n";
 					echo "var s = document.createElement('select');\n";
 					echo "s.id = 'qtrans_select_".$id."';\n";
-					echo "lc.parentNode.insertBefore(s,lc);\n";
+					echo "lc.parentNode.insertBefore(s,lc);";
 					// create dropdown fields for each language
 					foreach(qtrans_getSortedLanguages() as $language) {
 						echo qtrans_insertDropDownElement($language, qtrans_convertURL($url, $language), $id);
@@ -90,6 +89,5 @@ function qtrans_widget_init() {
 	else
 		require_once('mqtranslate_widget.inc.php');
 	register_widget('mqTranslateWidget');
-	do_action('qtrans_widget_init');
 }
 ?>
