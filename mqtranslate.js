@@ -279,6 +279,7 @@ var qTranslate=function()
 		h.separator=separator;
 		inpField.name+='_edit';
 		inpField.value=h.contents[activeLanguage];
+		inpField.readOnly = (qTranslateConfig.visible_languages && qTranslateConfig.visible_languages.indexOf(activeLanguage) >= 0);
 		//c('addContentHookC:inpField.value='+inpField.value);
 		inpField.onblur=function(){ updateFusedValueH(this.id,this.value); }
 	}
@@ -584,20 +585,31 @@ var qTranslate=function()
 
 		onTabSwitch=function()
 		{
-			for(var key in contentHooks){
+			var al = languageSwitch.getActiveLanguage();
+			var readonly = (qTranslateConfig.visible_languages && qTranslateConfig.visible_languages.indexOf(al) >= 0);
+			
+			for (var key in contentHooks) {
 				var h=contentHooks[key];
 				h.contentField.value=h.contents[this.lang];
+				h.contentField.readOnly = readonly;
 			}
-			if(alttextField){
+			if (alttextField) {
 				alttextField.value=alttexts[this.lang];
+				alttextField.readOnly = readonly;
 			}
+			
 			setSlugLanguage(this.lang);
-			if (!window.tinyMCE) return;
-			for(var i=0; i<tinyMCE.editors.length; ++i){
-				var ed=tinyMCE.editors[i];
-				var h=contentHooks[ed.id];
-				if(!h) continue;
-				ed.setContent(h.contentField.value);//, {format: 'raw'}
+			
+			if (!window.tinyMCE)
+				return;
+			
+			for (var i = 0; i < tinyMCE.editors.length; ++i) {
+				var ed = tinyMCE.editors[i];
+				var h = contentHooks[ed.id];
+				if (!h)
+					continue;
+				ed.setContent(h.contentField.value);
+				ed.getBody().setAttribute('contenteditable', !readonly);
 			}
 		}
 
@@ -611,6 +623,7 @@ var qTranslate=function()
 			if(h.mce) return;
 			h.mce=e;
 			e.getBody().addEventListener('blur',function(){ updateFusedValueH(e.id, e.getContent());});
+			e.getBody().setAttribute('contenteditable', !qTranslateConfig.editable_languages || qTranslateConfig.editable_languages.indexOf(activeLanguage) >= 0);
 			//c('h.contentField.value='+h.contentField.value);
 			//e.setContent(h.contentField.value);
 		}
@@ -646,9 +659,11 @@ var qTranslate=function()
 
 		onTabSwitch=function()
 		{
+			var readonly = (qTranslateConfig.visible_languages && qTranslateConfig.visible_languages.indexOf(al) >= 0);
 			for(var key in contentHooks){
 				var h=contentHooks[key];
 				h.contentField.value=h.contents[this.lang];
+				h.contentField.readOnly = readonly;
 			}
 		}
 

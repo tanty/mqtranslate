@@ -142,7 +142,11 @@ function qtrans_add_admin_lang_icons ()
 	#wpadminbar #wp-admin-bar-language > div.ab-item {
 		background-image: url('<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$q_config['language']]; ?>');
 	}
-<?php foreach ($q_config['enabled_languages'] as $language) : ?>
+<?php
+	foreach ($q_config['enabled_languages'] as $language) :
+		if (!mqtrans_currentUserCanView($language) && !mqtrans_currentUserCanEdit($language))
+			continue;
+?>
 	#wpadminbar ul li#wp-admin-bar-<?php echo $language ?> {
 		background-image: url('<?php echo trailingslashit(WP_CONTENT_URL).$q_config['flag_location'].$q_config['flag'][$language]; ?>');
 	}
@@ -957,6 +961,8 @@ function qtrans_add_language_menu( $wp_admin_bar )
 
 	foreach($q_config['enabled_languages'] as $language)
 	{
+		if (!mqtrans_currentUserCanView($language) && !mqtrans_currentUserCanEdit($language))
+			continue;
 		$wp_admin_bar->add_menu( 
 			array
 			(

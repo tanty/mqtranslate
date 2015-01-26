@@ -180,13 +180,14 @@ function mqtrans_postUpdated($post_ID, $after, $before) {
 	{
 		foreach ($fields as $f) {
 			$beforeMap = array();
-			$before = qtrans_split($before->{"post_{$f}"}, true, $beforeMap);
-			$after = qtrans_split($after->{"post_{$f}"}, true, $maps[$f]);
-			foreach ($after as $k => $v) {
+			$maps[$f] = array();
+			$beforeField = qtrans_split($before->{"post_{$f}"}, true, $beforeMap);
+			$afterField = qtrans_split($after->{"post_{$f}"}, true, $maps[$f]);
+			foreach ($afterField as $k => $v) {
 				if (!mqtrans_currentUserCanEdit($k))
-					unset($after[$k], $maps[$f][$k]);
+					unset($afterField[$k], $maps[$f][$k]);
 			}
-			$containers[$f] = array_merge($before, $after);
+			$containers[$f] = array_merge($beforeField, $afterField);
 			$maps[$f] = array_merge($beforeMap, $maps[$f]);
 		}
 	}
