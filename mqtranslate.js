@@ -417,21 +417,19 @@ var qTranslate=function()
 		// Swap fields
 		var newNameField=qtrans_ce('input', {name: nameField.name, className: 'hidden', value: nameField.value}, form, true);
 		nameField.name='';
-
+		nameField.readOnly = (qTranslateConfig.visible_languages && qTranslateConfig.visible_languages.indexOf(activeLanguage) >= 0);
+		
 		// Load text
 		var names = qTranslateConfig.term_name[nameField.value] || {};
-		if (activeLanguage !== qTranslateConfig.default_language){
-			nameField.value=names[activeLanguage] || '';
-		}
+		if (activeLanguage !== qTranslateConfig.default_language)
+			nameField.value = names[activeLanguage] || '';
 
 		editinline_activated=function()
 		{
-			//c('editinline_activated:'+this.innerHTML);
 			return true;
 		}
 
 		var editinlines=document.getElementsByClassName('editinline');
-		//c('editinlines.length='+editinlines.length);
 		for(var i=0; i<editinlines.length; ++i)
 		{
 			var e=editinlines[i];
@@ -441,9 +439,11 @@ var qTranslate=function()
 
 		onTabSwitch=function()
 		{
-			if(activeLanguage === this.lang) return;
-			nameField.value=names[this.lang] || '';
-			updateNamesAndTagCloud(activeLanguage,this.lang);
+			if (activeLanguage === this.lang)
+				return;
+			nameField.value = names[this.lang] || '';
+			nameField.readOnly = (qTranslateConfig.visible_languages && qTranslateConfig.visible_languages.indexOf(this.lang) >= 0);
+			updateNamesAndTagCloud(activeLanguage, this.lang);
 			activeLanguage = this.lang;
 		}
 
@@ -461,9 +461,7 @@ var qTranslate=function()
 			newNameFields[lang].value=this.value;
 			names[lang]=this.value;
 			if (lang === qTranslateConfig.default_language)
-			{
-					newNameField.value=this.value;
-			}
+				newNameField.value=this.value;
 		};
 		return true;
 	}
@@ -615,17 +613,13 @@ var qTranslate=function()
 
 		function setEditorHooks(e)
 		{
-			//window.onbeforeunload = function(){};
 			var id = e.id;
-			//c('setEditorHooks: id='+id);
 			if (!id) return;
 			var h=contentHooks[id];
 			if(h.mce) return;
 			h.mce=e;
 			e.getBody().addEventListener('blur',function(){ updateFusedValueH(e.id, e.getContent());});
 			e.getBody().setAttribute('contenteditable', !qTranslateConfig.editable_languages || qTranslateConfig.editable_languages.indexOf(activeLanguage) >= 0);
-			//c('h.contentField.value='+h.contentField.value);
-			//e.setContent(h.contentField.value);
 		}
 
 		// Add listeners for fields change
